@@ -22,6 +22,9 @@ const sendButton = document.querySelector('[data-send-button]');
 const state = loadState();
 let typingForContactId = null;
 
+ensureActiveContact();
+persistStateOnly();
+
 renderAll();
 attachEvents();
 
@@ -146,13 +149,17 @@ function renderTyping() {
 }
 
 function persistAndBroadcast() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  persistStateOnly();
 
   channel?.postMessage({
     type: 'state-sync',
     sourceId: tabId,
     state,
   });
+}
+
+function persistStateOnly() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 function loadState() {
@@ -199,6 +206,14 @@ function hydrateState(nextState) {
   const normalized = normalizeState(nextState);
   state.activeContactId = normalized.activeContactId;
   state.contacts = normalized.contacts;
+  ensureActiveContact();
+}
+
+function ensureActiveContact() {
+  const activeExists = state.contacts.some((contact) => contact.id === state.activeContactId);
+  if (!activeExists && state.contacts.length) {
+    state.activeContactId = state.contacts[0].id;
+  }
 }
 
 function getContactById(contactId) {
