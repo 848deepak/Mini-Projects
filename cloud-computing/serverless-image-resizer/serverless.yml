@@ -1,0 +1,45 @@
+service: serverless-image-resizer
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    DEST_BUCKET: ${self:service}-${sls:stage}-resized-images
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+          Resource:
+            - arn:aws:s3:::${self:service}-${sls:stage}-source-images/*
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+          Resource:
+            - arn:aws:s3:::${self:service}-${sls:stage}-resized-images/*
+
+functions:
+  resizeImage:
+    handler: src/resizer.handler
+    events:
+      - s3:
+          bucket: ${self:service}-${sls:stage}-source-images
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .jpg
+      - s3:
+          bucket: ${self:service}-${sls:stage}-source-images
+          event: s3:ObjectCreated:*
+          rules:
+            - suffix: .png
+
+resources:
+  Resources:
+    ResizedImagesBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.DEST_BUCKET}

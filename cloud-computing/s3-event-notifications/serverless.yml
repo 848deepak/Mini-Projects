@@ -1,0 +1,35 @@
+service: s3-event-notifications
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    SNS_TOPIC_ARN:
+      Ref: UploadNotificationsTopic
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - sns:Publish
+          Resource:
+            - Ref: UploadNotificationsTopic
+
+functions:
+  processUpload:
+    handler: src/handler.process
+    events:
+      - s3:
+          bucket: ${self:service}-${sls:stage}-uploads-bucket
+          event: s3:ObjectCreated:*
+          existing: true
+
+resources:
+  Resources:
+    UploadNotificationsTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: ${self:service}-${sls:stage}-topic

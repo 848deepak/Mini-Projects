@@ -1,0 +1,15 @@
+{
+  "name": "s3-event-notifications",
+  "version": "1.0.0",
+  "description": "Trigger SNS notifications from S3 uploads",
+  "main": "src/handler.js",
+  "scripts": {
+    "deploy": "serverless deploy"
+  },
+  "dependencies": {
+    "@aws-sdk/client-sns": "^3.400.0"
+  },
+  "devDependencies": {
+    "serverless": "^3.38.0"
+  }
+}

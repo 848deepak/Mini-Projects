@@ -1,0 +1,15 @@
+{
+  "name": "ec2-auto-stop-scheduler",
+  "version": "1.0.0",
+  "description": "Stop EC2 instances automatically on a schedule",
+  "main": "src/scheduler.js",
+  "scripts": {
+    "deploy": "serverless deploy"
+  },
+  "dependencies": {
+    "@aws-sdk/client-ec2": "^3.400.0"
+  },
+  "devDependencies": {
+    "serverless": "^3.38.0"
+  }
+}

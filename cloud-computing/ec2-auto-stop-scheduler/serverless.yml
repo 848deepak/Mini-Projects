@@ -1,0 +1,23 @@
+service: ec2-auto-stop-scheduler
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - ec2:DescribeInstances
+            - ec2:StopInstances
+          Resource: "*"
+
+functions:
+  autoStop:
+    handler: src/scheduler.handler
+    events:
+      # Run at 10 PM (22:00) UTC every day
+      - schedule: cron(0 22 * * ? *)
