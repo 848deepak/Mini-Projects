@@ -1,0 +1,43 @@
+service: serverless-contact-form
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    CONTACTS_TABLE: ${self:service}-${sls:stage}-contacts
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+          Resource:
+            - Fn::GetAtt: [ ContactsTable, Arn ]
+
+functions:
+  submitContact:
+    handler: src/handler.submit
+    events:
+      - httpApi:
+          path: /contact
+          method: post
+
+resources:
+  Resources:
+    ContactsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.CONTACTS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+plugins:
+  - serverless-offline

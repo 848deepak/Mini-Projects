@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Lightning Fast Global Static Site delivered through AWS CloudFront and S3">
+    <title>Global Edge Performance | CloudFront Static Site</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-mesh"></div>
+    
+    <nav class="glass-nav">
+        <div class="logo">Edge<span>Deploy</span></div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#performance">Performance</a></li>
+            <li><a href="#deploy" class="cta-button-small">Deploy Now</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <span class="badge">AWS Serverless Architecture</span>
+                <h1>Blazing Fast Sites on the <span>Edge</span></h1>
+                <p>Deploy your static content globally in milliseconds. Backed by the unmatched reliability of Amazon S3 and the speed of Amazon CloudFront.</p>
+                <div class="cta-group">
+                    <button class="cta-button primary">Get Started<div class="shine"></div></button>
+                    <button class="cta-button secondary">View Architecture</button>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="glass-card main-card">
+                    <div class="node-map">
+                        <div class="node origin pulsate">S3</div>
+                        <div class="connection line-1"></div>
+                        <div class="node edge e1">US East</div>
+                        <div class="connection line-2"></div>
+                        <div class="node edge e2">EU West</div>
+                        <div class="connection line-3"></div>
+                        <div class="node edge e3">Asia Pac</div>
+                    </div>
+                    <div class="stats">
+                        <div class="stat"><span class="label">Latency</span><span class="value">~15ms</span></div>
+                        <div class="stat"><span class="label">Uptime</span><span class="value">99.99%</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
