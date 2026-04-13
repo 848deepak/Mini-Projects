@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Media Feed</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero glass-panel">
+        <div>
+          <p class="eyebrow">Personalized feed</p>
+          <h1>Rank, fan out, and moderate content in one view.</h1>
+          <p class="hero__copy">A social feed simulator with posting, ranking modes, moderation actions, and engagement signals.</p>
+        </div>
+        <div class="hero__stats">
+          <div><span>Posts</span><strong data-stat-posts>0</strong></div>
+          <div><span>Followers</span><strong data-stat-followers>0</strong></div>
+          <div><span>Moderation queue</span><strong data-stat-queue>0</strong></div>
+          <div><span>Feed mode</span><strong data-stat-mode>For you</strong></div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="glass-panel panel panel--composer">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Composer</p>
+              <h2>Create a post</h2>
+            </div>
+          </div>
+          <form class="composer" data-composer-form>
+            <label class="field">
+              <span>Author</span>
+              <select name="author" data-author-select></select>
+            </label>
+            <label class="field">
+              <span>Audience</span>
+              <select name="audience">
+                <option value="followers">Followers</option>
+                <option value="public">Public</option>
+                <option value="friends">Friends</option>
+              </select>
+            </label>
+            <label class="field field--full">
+              <span>Caption</span>
+              <textarea name="caption" rows="4" placeholder="Share your latest update" required></textarea>
+            </label>
+            <div class="composer__row">
+              <label class="field">
+                <span>Media label</span>
+                <input name="media" type="text" placeholder="Photo / Video / Link" />
+              </label>
+              <button type="submit" class="button">Post now</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="glass-panel panel panel--feed">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Feed</p>
+              <h2>Ranked timeline</h2>
+            </div>
+            <div class="mode-switch" data-mode-switch></div>
+          </div>
+          <div class="feed-list" data-feed-list></div>
+        </section>
+
+        <aside class="glass-panel panel panel--moderation">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Moderation</p>
+              <h2>Review queue</h2>
+            </div>
+          </div>
+          <div class="moderation-list" data-moderation-list></div>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

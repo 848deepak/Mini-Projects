@@ -1,0 +1,68 @@
+export const users = [
+  { id: 'u1', name: 'Aanya', handle: '@aanya', followers: 12800 },
+  { id: 'u2', name: 'Rahul', handle: '@rahul', followers: 9740 },
+  { id: 'u3', name: 'Meera', handle: '@meera', followers: 18420 },
+  { id: 'u4', name: 'Kabir', handle: '@kabir', followers: 6120 },
+  { id: 'u5', name: 'Isha', handle: '@isha', followers: 22300 },
+];
+
+export const modeOptions = [
+  { id: 'for-you', label: 'For you' },
+  { id: 'following', label: 'Following' },
+  { id: 'moderation', label: 'Moderation' },
+];
+
+export const seedPosts = [
+  {
+    id: 'p1',
+    authorId: 'u3',
+    caption: 'Shipped a new recommendation ranking model today. Latency is down by 18%.',
+    media: 'Architecture diagram',
+    audience: 'public',
+    createdAt: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
+    likes: 243,
+    comments: 41,
+    shares: 19,
+    flagged: false,
+    following: true,
+  },
+  {
+    id: 'p2',
+    authorId: 'u1',
+    caption: 'Quick thought: strong fan-out on write is great until celebrity posts hit the system.',
+    media: 'Thread',
+    audience: 'followers',
+    createdAt: new Date(Date.now() - 1000 * 60 * 62).toISOString(),
+    likes: 182,
+    comments: 29,
+    shares: 12,
+    flagged: false,
+    following: true,
+  },
+  {
+    id: 'p3',
+    authorId: 'u5',
+    caption: 'Testing the moderation queue with suspicious content patterns and block rules.',
+    media: 'Short video',
+    audience: 'public',
+    createdAt: new Date(Date.now() - 1000 * 60 * 8).toISOString(),
+    likes: 51,
+    comments: 6,
+    shares: 2,
+    flagged: true,
+    following: false,
+  },
+  {
+    id: 'p4',
+    authorId: 'u2',
+    caption: 'Tonight’s build includes a new feed cache invalidation strategy.',
+    media: 'Screenshot',
+    audience: 'friends',
+    createdAt: new Date(Date.now() - 1000 * 60 * 142).toISOString(),
+    likes: 97,
+    comments: 14,
+    shares: 8,
+    flagged: false,
+    following: true,
+  },
+];

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library — Members</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">📚 Library<span>MS</span></a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Catalog</a>
+        <a href="issue-return.html" class="nav-link">Issue / Return</a>
+        <a href="members.html" class="nav-link active">Members</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="section-card">
+      <h3>Members <button class="btn btn-primary btn-sm" onclick="showAddMember()">+ Add Member</button></h3>
+      <input type="text" id="memberSearch" class="input" placeholder="Search members..." oninput="renderMembers()" style="margin-bottom:16px;">
+      <div id="memberList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;"></div>
+    </div>
+
+    <!-- Member Detail -->
+    <div class="section-card" id="memberDetail" style="display:none;">
+      <h3 id="memberDetailTitle">Member History</h3>
+      <table>
+        <thead><tr><th>Book</th><th>Issued</th><th>Due</th><th>Returned</th><th>Fine</th></tr></thead>
+        <tbody id="memberHistory"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="addMemberModal">
+    <div class="modal">
+      <h3>Add New Member</h3>
+      <div class="form-group"><label>Member ID</label><input id="am-id" class="input" placeholder="LIB011"></div>
+      <div class="form-group"><label>Name</label><input id="am-name" class="input" placeholder="Full name"></div>
+      <div class="form-group"><label>Email</label><input id="am-email" class="input" placeholder="email@cu.edu"></div>
+      <div class="form-group"><label>Phone</label><input id="am-phone" class="input" placeholder="9876543211"></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="document.getElementById('addMemberModal').classList.remove('active')">Cancel</button>
+        <button class="btn btn-primary" onclick="addMember()">Add</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="data.js"></script>
+  <script src="library.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initLibraryData();
+      renderMembers();
+    });
+
+    function renderMembers() {
+      const members = getMembers();
+      const search = document.getElementById('memberSearch').value.toLowerCase();
+      const txs = getTransactions_();
+
+      const filtered = members.filter(m => m.name.toLowerCase().includes(search) || m.id.toLowerCase().includes(search));
+      const container = document.getElementById('memberList');
+
+      container.innerHTML = filtered.map(m => {
+        const activeBooks = txs.filter(t => t.member_id === m.id && !t.returned_at).length;
+        return `
+          <div class="member-card" style="cursor:pointer;" onclick="showMemberHistory('${m.id}')">
+            <div class="member-avatar" style="background:${m.color}">${m.name.charAt(0)}</div>
+            <div class="member-info">
+              <h4>${m.name}</h4>
+              <p>${m.id} · ${m.email} · ${activeBooks} book(s) issued</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function showMemberHistory(memberId) {
+      const members = getMembers();
+      const member = members.find(m => m.id === memberId);
+      const txs = getTransactions_().filter(t => t.member_id === memberId).sort((a, b) => new Date(b.issued_at) - new Date(a.issued_at));
+      const books = getBooks();
+
+      document.getElementById('memberDetail').style.display = 'block';
+      document.getElementById('memberDetailTitle').textContent = `${member.name}'s History`;
+
+      document.getElementById('memberHistory').innerHTML = txs.length === 0
+        ? '<tr><td colspan="5" class="empty-state">No borrowing history</td></tr>'
+        : txs.map(t => {
+            const book = books.find(b => b.isbn === t.book_isbn);
+            const fine = t.returned_at ? calculateFine(t.due_date, t.returned_at) : 0;
+            return `
+              <tr>
+                <td>${book ? book.title : t.book_isbn}</td>
+                <td>${t.issued_at}</td>
+                <td>${t.due_date}</td>
+                <td>${t.returned_at || '<span class="badge badge-available">Active</span>'}</td>
+                <td>${fine > 0 ? `<span class="fine">₹${fine}</span>` : '—'}</td>
+              </tr>
+            `;
+          }).join('');
+
+      document.getElementById('memberDetail').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showAddMember() {
+      document.getElementById('addMemberModal').classList.add('active');
+    }
+
+    function addMember() {
+      const members = getMembers();
+      const m = {
+        id: document.getElementById('am-id').value.trim(),
+        name: document.getElementById('am-name').value.trim(),
+        email: document.getElementById('am-email').value.trim(),
+        phone: document.getElementById('am-phone').value.trim(),
+        joined: new Date().toISOString().split('T')[0],
+        color: SPINE_COLORS[Math.floor(Math.random() * SPINE_COLORS.length)]
+      };
+      if (!m.id || !m.name) { showToast('ID and name are required!'); return; }
+      if (members.some(mem => mem.id === m.id)) { showToast('Member ID already exists!'); return; }
+      members.push(m);
+      setMembers(members);
+      document.getElementById('addMemberModal').classList.remove('active');
+      renderMembers();
+      showToast('Member added!');
+    }
+  </script>
+</body>
+</html>

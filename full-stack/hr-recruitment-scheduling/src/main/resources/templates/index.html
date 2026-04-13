@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>HireFlow - HR Recruitment</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        :root { --bg: #f8fafc; --surface: #ffffff; --border: #cbd5e1; --text: #0f172a; --text-sec: #64748b; --accent: #2563eb; --accent-light: #eff6ff; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 40px; }
+        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 30px; }
+        .card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--border); }
+        h1, h2, h3 { font-weight: 800; color: var(--text); }
+        h2 { margin-bottom: 20px; font-size: 18px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text-sec); }
+        input, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; transition: 0.2s; }
+        input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; width: 100%; transition: 0.2s; background: var(--accent); color: white; }
+        .btn:hover { background: #1d4ed8; }
+        .text-error { color: #ef4444; font-size: 12px; margin-top: 4px; display: block; }
+        
+        .kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+        .kanban-col { background: #f1f5f9; border-radius: 10px; padding: 16px; min-height: 400px; }
+        .kanban-header { font-size: 14px; font-weight: 800; color: var(--text-sec); text-transform: uppercase; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #e2e8f0; display: flex; justify-content: space-between; }
+        
+        .candidate-card { background: white; padding: 16px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 12px; border: 1px solid #e2e8f0; }
+        .candidate-name { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+        .candidate-role { font-size: 12px; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+        .candidate-date { font-size: 11px; color: var(--text-sec); display: flex; align-items: center; gap: 4px; }
+        
+        .action-select { width: 100%; font-size: 11px; padding: 4px 8px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; font-weight: 600; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 1200px; margin: 0 auto 30px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: var(--accent); color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">👥</div>
+            <h1 style="margin: 0; font-size: 24px; letter-spacing: -0.5px;">HireFlow <span style="font-size: 14px; color: var(--text-sec); font-weight: 600; letter-spacing: normal;">ATS Dashboard</span></h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Add Candidate -->
+        <div class="card" style="height: fit-content;">
+            <h2>Add Candidate</h2>
+            <form th:action="@{/apply}" th:object="${newCandidate}" method="post">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" th:field="*{name}" placeholder="Jane Doe" required />
+                    <span class="text-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" th:field="*{email}" placeholder="jane@example.com" required />
+                    <span class="text-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Role Applied</label>
+                    <select th:field="*{roleApplied}">
+                        <option value="Frontend Engineer">Frontend Engineer</option>
+                        <option value="Backend Developer">Backend Developer</option>
+                        <option value="Product Manager">Product Manager</option>
+                        <option value="UX Designer">UX Designer</option>
+                        <option value="Data Scientist">Data Scientist</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label>Int. Date</label>
+                        <input type="date" th:field="*{interviewDate}" />
+                    </div>
+                    <div class="form-group">
+                        <label>Int. Time</label>
+                        <input type="time" th:field="*{interviewTime}" />
+                    </div>
+                </div>
+                <button type="submit" class="btn" style="margin-top: 8px;">Add to Pipeline</button>
+            </form>
+        </div>
+
+        <!-- Kanban Board -->
+        <div class="kanban-board">
+            
+            <!-- APPLIED COL -->
+            <div class="kanban-col">
+                <div class="kanban-header">
+                    <span>Applied</span>
+                    <span style="background: #e2e8f0; padding: 2px 8px; border-radius: 10px;" th:text="${#lists.size(candidates.?[status == 'Applied'])}">0</span>
+                </div>
+                <div th:each="c : ${candidates}" th:if="${c.status == 'Applied'}" class="candidate-card">
+                    <div class="candidate-name" th:text="${c.name}"></div>
+                    <div class="candidate-role" th:text="${c.roleApplied}"></div>
+                    <div style="font-size: 11px; color: var(--text-sec); margin-bottom: 8px;" th:text="${c.email}"></div>
+                    <form th:action="@{/update-status/{id}(id=${c.id})}" method="post">
+                        <select name="status" class="action-select" onchange="this.form.submit()">
+                            <option value="Applied" selected>Move to...</option>
+                            <option value="Interview Scheduled">Interview</option>
+                            <option value="Offered">Offer</option>
+                            <option value="Rejected">Reject</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- INTERVIEW COL -->
+            <div class="kanban-col">
+                <div class="kanban-header">
+                    <span>Interview</span>
+                    <span style="background: #e2e8f0; padding: 2px 8px; border-radius: 10px;" th:text="${#lists.size(candidates.?[status == 'Interview Scheduled'])}">0</span>
+                </div>
+                <div th:each="c : ${candidates}" th:if="${c.status == 'Interview Scheduled'}" class="candidate-card" style="border-left: 3px solid #eab308;">
+                    <div class="candidate-name" th:text="${c.name}"></div>
+                    <div class="candidate-role" th:text="${c.roleApplied}"></div>
+                    <div class="candidate-date" th:if="${c.interviewDate != null}">
+                        🗓️ <span th:text="${c.interviewDate}"></span> <span th:text="${c.interviewTime}"></span>
+                    </div>
+                    <form th:action="@{/update-status/{id}(id=${c.id})}" method="post">
+                        <select name="status" class="action-select" onchange="this.form.submit()">
+                            <option value="Interview Scheduled" selected>Move to...</option>
+                            <option value="Offered">Offer</option>
+                            <option value="Rejected">Reject</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- OFFERED COL -->
+            <div class="kanban-col">
+                <div class="kanban-header">
+                    <span>Offered</span>
+                    <span style="background: #e2e8f0; padding: 2px 8px; border-radius: 10px;" th:text="${#lists.size(candidates.?[status == 'Offered'])}">0</span>
+                </div>
+                <div th:each="c : ${candidates}" th:if="${c.status == 'Offered'}" class="candidate-card" style="border-left: 3px solid #10b981;">
+                    <div class="candidate-name" th:text="${c.name}"></div>
+                    <div class="candidate-role" th:text="${c.roleApplied}"></div>
+                    <form th:action="@{/update-status/{id}(id=${c.id})}" method="post">
+                        <select name="status" class="action-select" onchange="this.form.submit()">
+                            <option value="Offered" selected>Move to...</option>
+                            <option value="Rejected">Reject</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- REJECTED COL -->
+            <div class="kanban-col">
+                <div class="kanban-header">
+                    <span>Rejected</span>
+                    <span style="background: #e2e8f0; padding: 2px 8px; border-radius: 10px;" th:text="${#lists.size(candidates.?[status == 'Rejected'])}">0</span>
+                </div>
+                <div th:each="c : ${candidates}" th:if="${c.status == 'Rejected'}" class="candidate-card" style="opacity: 0.7;">
+                    <div class="candidate-name" th:text="${c.name}"></div>
+                    <div class="candidate-role" th:text="${c.roleApplied}"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

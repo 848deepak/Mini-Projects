@@ -1,0 +1,55 @@
+export const vehicleTypes = ['Car', 'SUV', 'Bike', 'EV'];
+
+export const parkingLots = [
+  {
+    id: 'lot-a',
+    name: 'Metro Central Mall',
+    location: 'Connaught Place',
+    capacity: 42,
+    distance: '0.4 km',
+    baseRate: 40,
+    surgeFactor: 1.25,
+    slots: [
+      { id: 'A-01', type: 'Car', status: 'available' },
+      { id: 'A-02', type: 'Car', status: 'available' },
+      { id: 'A-03', type: 'SUV', status: 'reserved' },
+      { id: 'A-04', type: 'Bike', status: 'available' },
+      { id: 'A-05', type: 'EV', status: 'available' },
+      { id: 'A-06', type: 'Car', status: 'occupied' },
+    ],
+  },
+  {
+    id: 'lot-b',
+    name: 'City Tech Park',
+    location: 'Saket',
+    capacity: 60,
+    distance: '0.9 km',
+    baseRate: 32,
+    surgeFactor: 1.1,
+    slots: [
+      { id: 'B-01', type: 'Car', status: 'available' },
+      { id: 'B-02', type: 'SUV', status: 'available' },
+      { id: 'B-03', type: 'SUV', status: 'occupied' },
+      { id: 'B-04', type: 'Bike', status: 'available' },
+      { id: 'B-05', type: 'EV', status: 'reserved' },
+      { id: 'B-06', type: 'Car', status: 'available' },
+    ],
+  },
+  {
+    id: 'lot-c',
+    name: 'North Station Plaza',
+    location: 'Rohini',
+    capacity: 34,
+    distance: '1.6 km',
+    baseRate: 24,
+    surgeFactor: 0.95,
+    slots: [
+      { id: 'C-01', type: 'Bike', status: 'available' },
+      { id: 'C-02', type: 'Bike', status: 'occupied' },
+      { id: 'C-03', type: 'Car', status: 'available' },
+      { id: 'C-04', type: 'EV', status: 'available' },
+      { id: 'C-05', type: 'Car', status: 'reserved' },
+      { id: 'C-06', type: 'SUV', status: 'available' },
+    ],
+  },
+];

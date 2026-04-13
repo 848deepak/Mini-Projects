@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Management System</title>
+  <meta name="description" content="Digital library system for book catalog, issue/return, and fine management">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">📚 Library<span>MS</span></a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link active">Catalog</a>
+        <a href="issue-return.html" class="nav-link">Issue / Return</a>
+        <a href="members.html" class="nav-link">Members</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <!-- Dashboard Stats -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-icon">📖</div><div><div class="stat-value" id="totalBooks">0</div><div class="stat-label">Total Books</div></div></div>
+      <div class="stat-card"><div class="stat-icon">📗</div><div><div class="stat-value" id="availBooks">0</div><div class="stat-label">Available</div></div></div>
+      <div class="stat-card"><div class="stat-icon">📕</div><div><div class="stat-value" id="issuedBooks">0</div><div class="stat-label">Issued Today</div></div></div>
+      <div class="stat-card"><div class="stat-icon">⚠️</div><div><div class="stat-value" id="overdueBooks">0</div><div class="stat-label">Overdue</div></div></div>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="section-card">
+      <div class="filter-bar">
+        <input type="text" id="searchInput" class="input search-input" placeholder="Search by title, author, or ISBN..." oninput="renderCatalog()">
+        <select id="genreFilter" class="input filter-select" onchange="renderCatalog()">
+          <option value="all">All Genres</option>
+        </select>
+        <select id="statusFilter" class="input filter-select" onchange="renderCatalog()">
+          <option value="all">All Status</option>
+          <option value="available">Available</option>
+          <option value="issued">Issued</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Book Catalog -->
+    <div class="books-grid" id="booksCatalog"></div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="data.js"></script>
+  <script src="catalog.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initLibraryData();
+      populateGenreFilter();
+      updateDashboard();
+      renderCatalog();
+    });
+
+    function updateDashboard() {
+      const books = getBooks();
+      const txs = getTransactions_();
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('totalBooks').textContent = books.reduce((s, b) => s + b.copies_total, 0);
+      document.getElementById('availBooks').textContent = books.reduce((s, b) => s + b.copies_available, 0);
+      document.getElementById('issuedBooks').textContent = txs.filter(t => t.issued_at.startsWith(today) && !t.returned_at).length;
+      document.getElementById('overdueBooks').textContent = txs.filter(t => !t.returned_at && t.due_date < today).length;
+    }
+  </script>
+</body>
+</html>

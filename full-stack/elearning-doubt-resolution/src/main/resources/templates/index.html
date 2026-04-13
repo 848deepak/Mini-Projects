@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>LearnHub - Doubt Resolution</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+        :root { --bg: #f8fafc; --surface: #ffffff; --border: #e2e8f0; --text: #1e293b; --text-sec: #64748b; --accent: #6366f1; --accent-light: #e0e7ff; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Nunito', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 40px; }
+        .container { max-width: 1000px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px; }
+        .card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); border: 1px solid var(--border); }
+        h1, h2 { font-weight: 800; color: var(--text); }
+        h2 { margin-bottom: 20px; font-size: 20px; }
+        
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .form-group { margin-bottom: 16px; width: 100%; }
+        label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: var(--text-sec); }
+        input, select, textarea { width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; transition: 0.2s; outline: none; background: #f8fafc; }
+        textarea { resize: vertical; min-height: 80px; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #ffffff; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 24px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; transition: 0.2s; background: var(--accent); color: white; }
+        .btn:hover { background: #4f46e5; }
+        
+        .question-card { background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; position: relative; }
+        .q-badge { position: absolute; top: 20px; right: 20px; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .q-badge.unresolved { background: #fee2e2; color: #b91c1c; }
+        .q-badge.resolved { background: #dcfce7; color: #15803d; }
+        
+        .q-title { font-size: 18px; font-weight: 800; margin-bottom: 8px; padding-right: 100px; color: var(--accent); }
+        .q-meta { font-size: 12px; color: var(--text-sec); font-weight: 600; margin-bottom: 12px; display: flex; gap: 12px; }
+        .q-desc { font-size: 15px; line-height: 1.6; color: var(--text); border-left: 3px solid #e2e8f0; padding-left: 14px; margin-bottom: 20px; }
+        
+        .a-section { background: #f8fafc; border-radius: 8px; padding: 16px; border: 1px dashed var(--border); }
+        .a-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 700; font-size: 13px; color: #1aa053; }
+        .a-body { font-size: 14px; color: var(--text); line-height: 1.5; }
+        
+        .answer-form { display: flex; gap: 10px; align-items: flex-start; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 1000px; margin: 0 auto 30px; display: flex; align-items: center; gap: 12px;">
+        <div style="background: var(--accent); color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🎓</div>
+        <div>
+            <h1 style="margin: 0; font-size: 24px; line-height: 1;">LearnHub Q&A</h1>
+            <div style="font-size: 13px; color: var(--text-sec); font-weight: 600;">Doubt Resolution Platform</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Ask Question -->
+        <div class="card">
+            <h2>Ask a Question</h2>
+            <form th:action="@{/ask}" th:object="${newDoubt}" method="post">
+                <div class="form-group">
+                    <label>Question Title</label>
+                    <input type="text" th:field="*{title}" placeholder="What is the difference between an Interface and Abstract Class?" required />
+                </div>
+                <div class="form-row">
+                    <div class="form-group" style="margin: 0;">
+                        <label>Your Name</label>
+                        <input type="text" th:field="*{author}" placeholder="Student Name" required />
+                    </div>
+                    <div class="form-group" style="margin: 0;">
+                        <label>Course / Subject</label>
+                        <input type="text" th:field="*{courseName}" placeholder="e.g. Java Programming" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Detailed Description</label>
+                    <textarea th:field="*{description}" placeholder="Explain what you have tried so far..." required></textarea>
+                </div>
+                <button type="submit" class="btn">Post Question</button>
+            </form>
+        </div>
+
+        <!-- Questions Feed -->
+        <div>
+            <h2 style="color: var(--text-sec); font-size: 16px; margin-bottom: 16px;">Recent Questions</h2>
+            <div th:if="${doubts.empty}" class="card" style="text-align: center; color: var(--text-sec); padding: 50px;">No questions asked yet. Be the first!</div>
+            
+            <div th:if="${!doubts.empty}">
+                <div th:each="d : ${doubts}" class="question-card">
+                    <div th:class="'q-badge ' + (${d.resolved} ? 'resolved' : 'unresolved')" th:text="${d.resolved ? 'Answered' : 'Unresolved'}"></div>
+                    
+                    <div class="q-title" th:text="${d.title}"></div>
+                    <div class="q-meta">
+                        <span th:text="'👤 ' + ${d.author}"></span>
+                        <span th:text="'📚 ' + ${d.courseName}"></span>
+                        <span th:text="'🕒 ' + ${#temporals.format(d.createdAt, 'dd MMM yyyy, HH:mm')}"></span>
+                    </div>
+                    <div class="q-desc" th:text="${d.description}"></div>
+                    
+                    <!-- Answer Section if resolved -->
+                    <div th:if="${d.resolved}" class="a-section">
+                        <div class="a-header">
+                            <span>✅ Answered by</span> <span th:text="${d.answeredBy}" style="color: #1e293b;"></span>
+                            <span style="color: #94a3b8; font-weight: 500; margin-left: auto;" th:text="${#temporals.format(d.answeredAt, 'dd MMM yyyy, HH:mm')}"></span>
+                        </div>
+                        <div class="a-body" th:text="${d.answer}"></div>
+                    </div>
+                    
+                    <!-- Provide Answer Form if not resolved -->
+                    <div th:if="${!d.resolved}" class="a-section" style="border-color: #cbd5e1; background: #fff;">
+                        <div style="font-weight: 700; font-size: 13px; color: var(--text-sec); margin-bottom: 8px;">Know the answer? Help out!</div>
+                        <form class="answer-form" th:action="@{/answer/{id}(id=${d.id})}" method="post">
+                            <input type="text" name="answeredBy" placeholder="Instructor / Helper Name" required style="width: 250px;" />
+                            <input type="text" name="answer" placeholder="Type your answer here..." required style="flex-grow: 1;" />
+                            <button type="submit" class="btn" style="padding: 10px 16px; background: #10b981;">Submit Answer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

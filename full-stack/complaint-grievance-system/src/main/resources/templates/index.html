@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>VoiceOut - Grievance Portal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&display=swap');
+        :root { --bg: #fff1f2; --surface: #ffffff; --border: #ffe4e6; --text: #111827; --text-sec: #4b5563; --accent: #e11d48; --accent-light: #fff1f2; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Bricolage Grotesque', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 40px; }
+        .container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 30px; }
+        .card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: 0 4px 20px rgba(225, 29, 72, 0.08); border: 2px solid var(--border); }
+        h1, h2 { font-weight: 700; color: var(--text); }
+        h2 { margin-bottom: 20px; font-size: 20px; color: var(--accent); }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; filter: brightness(0.9); font-size: 13px; font-weight: 600; margin-bottom: 4px; color: var(--text-sec); }
+        input, select, textarea { width: 100%; padding: 10px 12px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; transition: 0.2s; outline: none; background: #fffafb; }
+        textarea { resize: vertical; min-height: 80px; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); background: white; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; width: 100%; transition: 0.2s; background: var(--accent); color: white; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn:hover { background: #be123c; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(225, 29, 72, 0.2); }
+        .text-error { color: #f43f5e; font-size: 12px; margin-top: 4px; display: block; font-weight: 600; }
+        
+        .complaints-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .complaint-card { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; }
+        .tracking-id { font-family: monospace; font-size: 13px; color: var(--accent); font-weight: 700; margin-bottom: 6px; letter-spacing: 1px; }
+        .c-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+        .c-cat { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-sec); font-weight: 600; margin-bottom: 12px; display: inline-block; background: #f3f4f6; padding: 4px 8px; border-radius: 4px; }
+        .c-desc { font-size: 14px; color: var(--text-sec); margin-bottom: 16px; flex-grow: 1; line-height: 1.5; }
+        
+        .badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge-Pending { background: #fee2e2; color: #991b1b; }
+        .badge-InProgress { background: #fef08a; color: #854d0e; }
+        .badge-Resolved { background: #dcfce7; color: #166534; }
+        .badge-Dismissed { background: #f1f5f9; color: #475569; }
+
+        .form-row { display: flex; gap: 8px; align-items: center; justify-content: space-between; border-top: 1px solid #f3f4f6; padding-top: 16px; margin-top: 16px; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 1100px; margin: 0 auto 30px; display: flex; align-items: center; gap: 12px;">
+        <div style="background: var(--accent); color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🗣️</div>
+        <div>
+            <h1 style="margin: 0; font-size: 24px; line-height: 1;">VoiceOut</h1>
+            <div style="font-size: 13px; color: var(--text-sec); font-weight: 600;">Citizen Grievance Portal</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- New Complaint -->
+        <div class="card" style="height: fit-content;">
+            <h2>Lodge a Complaint</h2>
+            <form th:action="@{/submit}" th:object="${newComplaint}" method="post">
+                <div class="form-group">
+                    <label>Title / Issue Summary</label>
+                    <input type="text" th:field="*{title}" placeholder="Pothole on Main St" required />
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select th:field="*{category}">
+                        <option value="Roads & Transport">Roads & Transport</option>
+                        <option value="Water Supply">Water Supply</option>
+                        <option value="Electricity">Electricity</option>
+                        <option value="Sanitation & Waste">Sanitation & Waste</option>
+                        <option value="Public Nuisance">Public Nuisance</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Specific Location</label>
+                    <input type="text" th:field="*{location}" placeholder="123 Example Ave" required />
+                </div>
+                <div class="form-group">
+                    <label>Detailed Description</label>
+                    <textarea th:field="*{description}" placeholder="Please describe the issue..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Your Name (Optional)</label>
+                    <input type="text" th:field="*{submitterName}" placeholder="John Doe" />
+                </div>
+                <div class="form-group">
+                    <label>Phone Number (Optional)</label>
+                    <input type="text" th:field="*{submitterPhone}" placeholder="+1 234 567 8900" />
+                </div>
+                <button type="submit" class="btn" style="margin-top: 10px;">Submit Grievance</button>
+            </form>
+        </div>
+
+        <!-- Complaints List -->
+        <div>
+            <div th:if="${complaints.empty}" class="card" style="text-align: center; color: var(--text-sec); padding: 50px;">No public grievances lodged yet.</div>
+            
+            <div class="complaints-grid" th:if="${!complaints.empty}">
+                <div class="complaint-card" th:each="c : ${complaints}">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                        <div class="tracking-id" th:text="${c.trackingId}"></div>
+                        <span th:text="${c.status}" th:class="'badge badge-' + ${#strings.replace(c.status, ' ', '')}"></span>
+                    </div>
+                    <div class="c-title" th:text="${c.title}"></div>
+                    <div class="c-cat" th:text="${c.category} + ' &bull; ' + ${c.location}"></div>
+                    <div class="c-desc" th:text="${c.description}"></div>
+                    
+                    <div class="form-row">
+                        <div style="font-size: 11px; color: #9ca3af; font-weight: 600;">Action:</div>
+                        <form th:action="@{/update-status/{id}(id=${c.id})}" method="post">
+                            <select name="status" onchange="this.form.submit()" style="padding: 6px; font-size: 11px; width: 140px; border-color: #e5e7eb; background: #f9fafb;">
+                                <option value="" disabled selected>Update Status</option>
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved</option>
+                                <option value="Dismissed">Dismissed</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

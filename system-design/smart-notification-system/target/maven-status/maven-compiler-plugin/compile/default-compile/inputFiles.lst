@@ -1,0 +1,15 @@
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/SmartNotificationApplication.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/controller/NotificationController.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/dto/CreateNotificationRequest.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/dto/NotificationResponse.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/dto/PreferenceResponse.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/dto/UpdatePreferenceRequest.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/exception/ApiError.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/exception/ConflictException.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/exception/GlobalExceptionHandler.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/exception/NotFoundException.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/model/Channel.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/model/Notification.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/model/NotificationStatus.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/model/UserPreference.java
+/Users/deepakpandey/Coding/mini-projects/system-design/smart-notification-system/src/main/java/com/miniprojects/notifications/service/NotificationService.java

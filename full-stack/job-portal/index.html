@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobBoard — Find Your Dream Job</title>
+  <meta name="description" content="Job portal with skill-match scoring, job listings, and employer dashboard">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">💼 Job<span>Board</span></a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link active">Jobs</a>
+        <a href="employer.html" class="nav-link">Employer</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="hero">
+      <h1>Find Your Dream Job</h1>
+      <p>Browse opportunities that match your skills</p>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search jobs by title, company, or skills..." oninput="filterJobs()">
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <!-- Filters -->
+      <aside class="filter-panel">
+        <h3>Filters</h3>
+        <div class="filter-group">
+          <label>Job Type</label>
+          <div class="checkbox-group" id="typeFilters"></div>
+        </div>
+        <div class="filter-group">
+          <label>Location</label>
+          <div class="checkbox-group" id="locationFilters"></div>
+        </div>
+        <div class="filter-group">
+          <label>Salary Range</label>
+          <input type="range" id="salaryRange" min="0" max="50" value="0" oninput="filterJobs()">
+          <div class="range-label">Min: ₹<span id="salaryLabel">0</span> LPA</div>
+        </div>
+        <div class="filter-group">
+          <label>Your Skills (comma-separated)</label>
+          <input type="text" id="skillsInput" class="input" placeholder="javascript, react, node" oninput="filterJobs()">
+        </div>
+        <button class="btn btn-outline btn-block" onclick="clearFilters()">Clear All</button>
+      </aside>
+
+      <!-- Job listings -->
+      <section class="jobs-section">
+        <div class="jobs-header">
+          <span id="jobCount">0 jobs found</span>
+          <select id="sortSelect" onchange="filterJobs()">
+            <option value="match">Best Match</option>
+            <option value="salary">Highest Salary</option>
+            <option value="recent">Most Recent</option>
+          </select>
+        </div>
+        <div id="jobList"></div>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="data.js"></script>
+  <script src="jobs.js"></script>
+</body>
+</html>

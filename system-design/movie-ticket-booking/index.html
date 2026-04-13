@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Ticket Booking</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="site-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Now showing</p>
+          <h1>Book your seat before the lights go down.</h1>
+          <p class="hero__copy">
+            Browse curated screenings, choose a showtime, and lock your seats in a cinematic, seat-first flow.
+          </p>
+        </div>
+        <div class="hero__panel">
+          <span class="label">Live inventory</span>
+          <strong data-stats>Loading showtimes...</strong>
+          <p>Seats are persisted in localStorage per showtime for a realistic booking experience.</p>
+        </div>
+      </header>
+
+      <section class="toolbar">
+        <label class="field">
+          <span>Search movies</span>
+          <input data-search type="search" placeholder="Title, genre, synopsis" />
+        </label>
+        <label class="field">
+          <span>Filter by genre</span>
+          <select data-filter>
+            <option value="all">All genres</option>
+            <option value="action">Action</option>
+            <option value="romance">Romance</option>
+            <option value="sci-fi">Sci-Fi</option>
+            <option value="cyberpunk">Cyberpunk</option>
+            <option value="suspense">Suspense</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="movie-grid" data-movie-grid></section>
+
+      <section class="empty-state" data-empty hidden>
+        <p class="eyebrow">No matches</p>
+        <h2>No movies match your current filters.</h2>
+        <p>Clear the search or genre filter to see the full line-up again.</p>
+      </section>
+    </div>
+
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/StockTradingApplication.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/controller/TradingController.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/dto/MarketTickRequest.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/dto/OrderResponse.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/dto/PortfolioResponse.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/dto/SubmitOrderRequest.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/exception/ApiError.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/exception/ConflictException.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/exception/GlobalExceptionHandler.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/exception/NotFoundException.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/model/Asset.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/model/Fill.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/model/Holding.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/model/MarketTick.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/model/Portfolio.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/model/TradingOrder.java
+/Users/deepakpandey/Coding/mini-projects/system-design/stock-trading-simulator/src/main/java/com/miniprojects/trading/service/TradingService.java

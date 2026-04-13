@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gusto - Restaurant Table Reservations</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+        :root { --bg: #fffbf7; --surface: #ffffff; --border: #f0e6d2; --text: #2d2419; --text-sec: #8c7b66; --accent: #c2410c; --accent-light: #fed7aa; --success: #15803d; --radius: 16px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); padding: 40px; }
+        h1, h2 { font-family: 'Playfair Display', serif; font-weight: 700; }
+        .container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 350px 1fr; gap: 30px; }
+        .card { background: var(--surface); border-radius: var(--radius); padding: 28px; box-shadow: 0 10px 25px rgba(194, 65, 12, 0.05); border: 1px solid var(--border); }
+        h2 { margin-bottom: 24px; color: var(--accent); }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 0.5px; }
+        input, select { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; background: #fffdfa; }
+        input:focus, select:focus { border-color: var(--accent); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; width: 100%; transition: 150ms; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-sm { padding: 6px 12px; font-size: 11px; width: auto; border-radius: 6px; }
+        .text-error { color: #ef4444; font-size: 12px; margin-top: 4px; display: block; }
+        table { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        th, td { padding: 16px; text-align: left; font-size: 14px; }
+        th { font-weight: 600; font-size: 12px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); }
+        tr td { background: white; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        tr td:first-child { border-left: 1px solid var(--border); border-radius: 8px 0 0 8px; }
+        tr td:last-child { border-right: 1px solid var(--border); border-radius: 0 8px 8px 0; }
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .badge.Confirmed { background: #dcfce7; color: #166534; }
+        .badge.Seated { background: #dbeafe; color: #1e40af; }
+        .badge.Finished { background: #f3f4f6; color: #4b5563; }
+        .badge.Cancelled { background: #fee2e2; color: #991b1b; }
+        .flex-actions { display: flex; gap: 8px; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 1100px; margin: 0 auto 40px; text-align: center;">
+        <h1 style="font-size: 40px; color: var(--accent);">Gusto.</h1>
+        <p style="color: var(--text-sec); font-size: 14px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase;">Table Reservations</p>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Book a Table</h2>
+            <form th:action="@{/reserve}" th:object="${newReservation}" method="post">
+                <div class="form-group">
+                    <label>Guest Name</label>
+                    <input type="text" th:field="*{customerName}" placeholder="Full Name" />
+                    <span class="text-error" th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Contact Number</label>
+                    <input type="tel" th:field="*{contactNumber}" placeholder="+1 (555) 000-0000" />
+                    <span class="text-error" th:if="${#fields.hasErrors('contactNumber')}" th:errors="*{contactNumber}"></span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" th:field="*{reservationDate}" />
+                        <span class="text-error" th:if="${#fields.hasErrors('reservationDate')}" th:errors="*{reservationDate}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" th:field="*{reservationTime}" />
+                        <span class="text-error" th:if="${#fields.hasErrors('reservationTime')}" th:errors="*{reservationTime}"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Party Size</label>
+                    <select th:field="*{partySize}">
+                        <option value="1">1 Person</option>
+                        <option value="2">2 People</option>
+                        <option value="3">3 People</option>
+                        <option value="4">4 People</option>
+                        <option value="5">5 People</option>
+                        <option value="6">6+ People</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Special Requests (Optional)</label>
+                    <input type="text" th:field="*{specialRequests}" placeholder="Window seat, anniversary, etc." />
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top: 8px;">Confirm Reservation</button>
+            </form>
+        </div>
+
+        <div>
+            <h2 style="margin-left: 8px; color: var(--text);">Today's Reservations</h2>
+            <div th:if="${reservations.empty}" style="padding: 40px; text-align: center; color: var(--text-sec); border: 1px dashed var(--border); border-radius: var(--radius);">No reservations today.</div>
+            <table th:if="${!reservations.empty}">
+                <thead><tr><th>Guest</th><th>Time</th><th>Party</th><th>Requests</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>
+                    <tr th:each="r : ${reservations}">
+                        <td>
+                            <div th:text="${r.customerName}" style="font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700;"></div>
+                            <div th:text="${r.contactNumber}" style="font-size: 12px; color: var(--text-sec);"></div>
+                        </td>
+                        <td>
+                            <div th:text="${r.reservationTime}" style="font-weight: 600; color: var(--accent);"></div>
+                            <div th:text="${r.reservationDate}" style="font-size: 11px; color: var(--text-sec);"></div>
+                        </td>
+                        <td><strong th:text="${r.partySize}"></strong> pax</td>
+                        <td th:text="${r.specialRequests ?: '-'}"></td>
+                        <td><span th:text="${r.status}" th:class="'badge ' + ${r.status}"></span></td>
+                        <td class="flex-actions">
+                            <form th:action="@{/status/{id}(id=${r.id})}" method="post" th:if="${r.status == 'Confirmed'}">
+                                <input type="hidden" name="status" value="Seated" />
+                                <button type="submit" class="btn btn-sm" style="background:#dbeafe; color:#1e40af;">Seat</button>
+                            </form>
+                            <form th:action="@{/status/{id}(id=${r.id})}" method="post" th:if="${r.status == 'Seated'}">
+                                <input type="hidden" name="status" value="Finished" />
+                                <button type="submit" class="btn btn-sm" style="background:#f3f4f6; color:#4b5563;">Finish</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

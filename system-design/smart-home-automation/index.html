@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Home Automation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Connected home</p>
+          <h1>Device control, rule automation, and live event triggers.</h1>
+          <p class="hero__copy">
+            Manage the house from one dashboard, fire automations from sensors, and keep an audit trail of every action.
+          </p>
+        </div>
+        <div class="hero__panel">
+          <label class="field">
+            <span>Current role</span>
+            <select data-role-select>
+              <option value="owner">Owner</option>
+              <option value="family">Family</option>
+              <option value="guest">Guest</option>
+            </select>
+          </label>
+          <div class="hero__stats">
+            <div><span class="metric-label">Devices online</span><strong data-stat="devices">0</strong></div>
+            <div><span class="metric-label">Active rules</span><strong data-stat="rules">0</strong></div>
+            <div><span class="metric-label">Recent events</span><strong data-stat="events">0</strong></div>
+            <div><span class="metric-label">Role</span><strong data-stat="role">Owner</strong></div>
+          </div>
+        </div>
+      </header>
+
+      <section class="status-banner glass-panel" data-status-banner></section>
+
+      <section class="scene-strip glass-panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Scenes</p>
+            <h2>Apply a mood instantly.</h2>
+          </div>
+        </div>
+        <div class="scene-grid" data-scene-grid></div>
+      </section>
+
+      <main class="dashboard-grid">
+        <section class="glass-panel panel panel--devices">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Devices</p>
+              <h2>Household devices</h2>
+            </div>
+          </div>
+          <div class="device-grid" data-device-grid></div>
+        </section>
+
+        <section class="glass-panel panel panel--rules">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Automation rules</p>
+              <h2>Create triggers and actions</h2>
+            </div>
+          </div>
+
+          <form class="rule-form" data-rule-form>
+            <label class="field">
+              <span>Rule name</span>
+              <input name="name" type="text" placeholder="Motion turns on hallway light" required />
+            </label>
+
+            <label class="field">
+              <span>Trigger</span>
+              <select name="trigger" required>
+                <option value="motion">Motion detected</option>
+                <option value="door">Door opened</option>
+                <option value="smoke">Smoke detected</option>
+                <option value="temperature">Temperature spike</option>
+                <option value="time">Time-based</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Trigger room</span>
+              <select name="room" required></select>
+            </label>
+
+            <div class="rule-form__split">
+              <label class="field">
+                <span>Action</span>
+                <select name="action" required>
+                  <option value="light">Set light</option>
+                  <option value="lock">Set lock</option>
+                  <option value="thermostat">Set thermostat</option>
+                  <option value="camera">Set camera</option>
+                </select>
+              </label>
+
+              <label class="field">
+                <span>Action room</span>
+                <select name="actionRoom" required>
+                  <option value="All">All</option>
+                  <option value="Living Room">Living Room</option>
+                  <option value="Bedroom">Bedroom</option>
+                  <option value="Kitchen">Kitchen</option>
+                  <option value="Hallway">Hallway</option>
+                  <option value="Porch">Porch</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="field">
+              <span>Action value or time</span>
+              <input name="value" type="text" placeholder="on, off, locked, 21:00, 20" />
+            </label>
+
+            <label class="field">
+              <span>Time threshold (for time rules)</span>
+              <input name="timeAfter" type="time" />
+            </label>
+
+            <button class="button" type="submit">Add rule</button>
+          </form>
+
+          <div class="rule-list" data-rule-list></div>
+        </section>
+
+        <aside class="glass-panel panel panel--events">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Event trigger lab</p>
+              <h2>Simulate sensor events</h2>
+            </div>
+          </div>
+
+          <div class="event-buttons">
+            <button type="button" class="button button--secondary" data-event-button="motion">Motion</button>
+            <button type="button" class="button button--secondary" data-event-button="door">Door opened</button>
+            <button type="button" class="button button--secondary" data-event-button="temperature">Temp spike</button>
+            <button type="button" class="button button--secondary" data-event-button="smoke">Smoke alert</button>
+          </div>
+
+          <div class="activity-list" data-activity-list></div>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

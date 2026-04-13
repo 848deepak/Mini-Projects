@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TaskSync - Collab Tool</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;800&display=swap');
+        :root { --bg: #fdf2f8; --surface: #ffffff; --border: #fce7f3; --text: #111827; --text-sec: #6b7280; --accent: #db2777; --radius: 16px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Public Sans', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 40px; }
+        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 300px 1fr; gap: 30px; }
+        .card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: 0 4px 6px -1px rgba(219, 39, 119, 0.1); border: 2px solid var(--border); }
+        h1, h2 { font-weight: 800; }
+        h2 { margin-bottom: 20px; font-size: 18px; color: var(--accent); }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--text-sec); text-transform: uppercase; }
+        input, select { width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; transition: 0.2s; font-weight: 500; }
+        input:focus, select:focus { border-color: var(--accent); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; width: 100%; transition: 0.2s; background: var(--accent); color: white; }
+        .btn:hover { background: #be185d; }
+        .text-error { color: #ef4444; font-size: 12px; margin-top: 4px; display: block; }
+        
+        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .col { background: #fdf2f8; border-radius: 12px; padding: 16px; min-height: 500px; border: 1px solid var(--border); }
+        .col-header { font-weight: 800; font-size: 14px; margin-bottom: 16px; text-transform: uppercase; color: var(--text-sec); display: flex; justify-content: space-between; align-items: center; }
+        
+        .task-card { background: white; border: 2px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .task-title { font-weight: 700; font-size: 15px; margin-bottom: 8px; }
+        .task-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-sec); font-weight: 600; margin-bottom: 12px; }
+        .avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--accent); color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
+        select.sm { padding: 4px 8px; font-size: 11px; font-weight: 700; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 1200px; margin: 0 auto 30px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: var(--accent); color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">⚡</div>
+            <h1 style="margin: 0; font-size: 28px; letter-spacing: -0.5px;">TaskSync</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- New Task Form -->
+        <div class="card" style="height: fit-content;">
+            <h2>Create Task</h2>
+            <form th:action="@{/add}" th:object="${newTask}" method="post">
+                <div class="form-group">
+                    <label>Task Title</label>
+                    <input type="text" th:field="*{title}" placeholder="What needs to be done?" />
+                    <span class="text-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" th:field="*{projectName}" placeholder="e.g. Website Redesign" />
+                </div>
+                <div class="form-group">
+                    <label>Assign To</label>
+                    <input type="text" th:field="*{assignee}" placeholder="Developer Name" />
+                    <span class="text-error" th:if="${#fields.hasErrors('assignee')}" th:errors="*{assignee}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Due Date</label>
+                    <input type="date" th:field="*{dueDate}" />
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select th:field="*{status}">
+                        <option value="To Do">To Do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Done">Done</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Add Task</button>
+            </form>
+        </div>
+
+        <!-- Board -->
+        <div class="board">
+            <!-- TO DO -->
+            <div class="col">
+                <div class="col-header">
+                    <span>📌 To Do</span>
+                    <span style="background: #fbcfe8; padding: 2px 8px; border-radius: 12px; color: #831843;" th:text="${#lists.size(tasks.?[status == 'To Do'])}">0</span>
+                </div>
+                <div th:each="t : ${tasks}" th:if="${t.status == 'To Do'}" class="task-card">
+                    <div style="font-size: 10px; font-weight: 700; color: var(--accent); margin-bottom: 4px; text-transform: uppercase;" th:text="${t.projectName}"></div>
+                    <div class="task-title" th:text="${t.title}"></div>
+                    <div class="task-meta">
+                        <span style="display: flex; align-items: center; gap: 4px;">
+                            <div class="avatar" th:text="${#strings.substring(t.assignee, 0, 1)}"></div> <span th:text="${t.assignee}"></span>
+                        </span>
+                        <span th:text="${t.dueDate}"></span>
+                    </div>
+                    <form th:action="@{/update/{id}(id=${t.id})}" method="post">
+                        <select name="status" class="sm" onchange="this.form.submit()">
+                            <option value="To Do" selected>To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Done</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- IN PROGRESS -->
+            <div class="col">
+                <div class="col-header">
+                    <span>🚀 In Progress</span>
+                    <span style="background: #fbcfe8; padding: 2px 8px; border-radius: 12px; color: #831843;" th:text="${#lists.size(tasks.?[status == 'In Progress'])}">0</span>
+                </div>
+                <div th:each="t : ${tasks}" th:if="${t.status == 'In Progress'}" class="task-card" style="border-left: 4px solid var(--accent);">
+                    <div style="font-size: 10px; font-weight: 700; color: var(--accent); margin-bottom: 4px; text-transform: uppercase;" th:text="${t.projectName}"></div>
+                    <div class="task-title" th:text="${t.title}"></div>
+                    <div class="task-meta">
+                        <span style="display: flex; align-items: center; gap: 4px;">
+                            <div class="avatar" th:text="${#strings.substring(t.assignee, 0, 1)}"></div> <span th:text="${t.assignee}"></span>
+                        </span>
+                        <span th:text="${t.dueDate}"></span>
+                    </div>
+                    <form th:action="@{/update/{id}(id=${t.id})}" method="post">
+                        <select name="status" class="sm" onchange="this.form.submit()">
+                            <option value="To Do">To Do</option>
+                            <option value="In Progress" selected>In Progress</option>
+                            <option value="Done">Done</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- DONE -->
+            <div class="col">
+                <div class="col-header">
+                    <span>✅ Done</span>
+                    <span style="background: #fbcfe8; padding: 2px 8px; border-radius: 12px; color: #831843;" th:text="${#lists.size(tasks.?[status == 'Done'])}">0</span>
+                </div>
+                <div th:each="t : ${tasks}" th:if="${t.status == 'Done'}" class="task-card" style="opacity: 0.6;">
+                    <div style="text-decoration: line-through;">
+                        <div style="font-size: 10px; font-weight: 700; color: var(--text-sec); margin-bottom: 4px; text-transform: uppercase;" th:text="${t.projectName}"></div>
+                        <div class="task-title" th:text="${t.title}"></div>
+                    </div>
+                    <form th:action="@{/update/{id}(id=${t.id})}" method="post">
+                        <select name="status" class="sm" onchange="this.form.submit()">
+                            <option value="To Do">To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done" selected>Done</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

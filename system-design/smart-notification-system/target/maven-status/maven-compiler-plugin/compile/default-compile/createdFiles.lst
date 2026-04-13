@@ -1,0 +1,16 @@
+com/miniprojects/notifications/model/NotificationStatus.class
+com/miniprojects/notifications/model/UserPreference$1.class
+com/miniprojects/notifications/model/Channel.class
+com/miniprojects/notifications/model/Notification.class
+com/miniprojects/notifications/dto/UpdatePreferenceRequest.class
+com/miniprojects/notifications/dto/NotificationResponse.class
+com/miniprojects/notifications/SmartNotificationApplication.class
+com/miniprojects/notifications/exception/GlobalExceptionHandler.class
+com/miniprojects/notifications/controller/NotificationController.class
+com/miniprojects/notifications/service/NotificationService.class
+com/miniprojects/notifications/exception/ConflictException.class
+com/miniprojects/notifications/exception/ApiError.class
+com/miniprojects/notifications/exception/NotFoundException.class
+com/miniprojects/notifications/dto/CreateNotificationRequest.class
+com/miniprojects/notifications/dto/PreferenceResponse.class
+com/miniprojects/notifications/model/UserPreference.class

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deepak Pandey - Cloud Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">DP</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero" id="about">
+        <div class="hero-content">
+            <h1 class="display-name">Deepak Pandey</h1>
+            <p class="tagline">Engineering scalable cloud solutions & full-stack experiences.</p>
+        </div>
+    </header>
+
+    <section id="skills" class="section">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-item">AWS / EC2</div>
+            <div class="skill-item">System Design</div>
+            <div class="skill-item">Full Stack Dev</div>
+            <div class="skill-item">JavaScript</div>
+            <div class="skill-item">CSS Architecture</div>
+            <div class="skill-item">Git / Deployment</div>
+        </div>
+    </section>
+
+    <section id="projects" class="section">
+        <h2 class="section-title">Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <h3>Cloud Portfolio</h3>
+                <p>A static portfolio hosted on EC2 with Apache.</p>
+                <div class="project-overlay">
+                    <a href="#">View Code</a>
+                    <a href="#">Live Demo</a>
+                </div>
+            </div>
+            <div class="project-card">
+                <h3>Photo Gallery</h3>
+                <p>An S3-hosted static website with masonry layout.</p>
+                <div class="project-overlay">
+                    <a href="#">View Code</a>
+                    <a href="#">Live Demo</a>
+                </div>
+            </div>
+            <div class="project-card">
+                <h3>System Design Labs</h3>
+                <p>Interactive simulations for large-scale systems.</p>
+                <div class="project-overlay">
+                    <a href="#">View Code</a>
+                    <a href="#">Live Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project specific requirement: Architecture UI Addition -->
+    <section id="architecture" class="section architecture-section">
+        <h2 class="section-title">Deployment Architecture</h2>
+        <p class="architect-desc">Visualizing the flow of requests from the user to the AWS hosted files.</p>
+        
+        <div class="architecture-diagram">
+            <div class="node browser">
+                <span class="node-label">Browser</span>
+            </div>
+            
+            <div class="flow-arrow">
+                <span class="arrow-dot"></span>
+                <span class="arrow-dot"></span>
+                <span class="arrow-dot"></span>
+            </div>
+
+            <div class="node aws-ec2">
+                <span class="node-label">AWS EC2 (t2.micro)</span>
+            </div>
+
+            <div class="flow-arrow">
+                <span class="arrow-dot"></span>
+                <span class="arrow-dot"></span>
+                <span class="arrow-dot"></span>
+            </div>
+
+            <div class="node apache">
+                <span class="node-label">Apache Web Server</span>
+            </div>
+
+            <div class="flow-arrow">
+                <span class="arrow-dot"></span>
+                <span class="arrow-dot"></span>
+                <span class="arrow-dot"></span>
+            </div>
+
+            <div class="node html-files">
+                <span class="node-label">HTML/CSS/JS Files</span>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="section">
+        <h2 class="section-title">Let's Connect</h2>
+        <p>Currently focusing on BE-CSE/IT Cloud Computing and System Design.</p>
+        <a href="mailto:example@student.cu.edu" class="contact-link">Get In Touch</a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

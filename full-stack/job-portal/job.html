@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobBoard — Job Detail</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">💼 Job<span>Board</span></a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Jobs</a>
+        <a href="employer.html" class="nav-link">Employer</a>
+      </div>
+    </div>
+  </nav>
+  <main class="container detail-page" id="jobDetail">
+    <p>Loading...</p>
+  </main>
+  <div class="toast" id="toast"></div>
+  <script src="data.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initJobData();
+      const params = new URLSearchParams(window.location.search);
+      const jobId = parseInt(params.get('id'));
+      const jobs = getJobs();
+      const job = jobs.find(j => j.id === jobId);
+      if (!job) { document.getElementById('jobDetail').innerHTML = '<h2>Job not found</h2>'; return; }
+
+      const userSkills = (localStorage.getItem('jp_user_skills') || '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+      const matchScore = job.skills_required.length > 0 && userSkills.length > 0
+        ? Math.round((userSkills.filter(s => job.skills_required.map(sk => sk.toLowerCase()).includes(s)).length / job.skills_required.length) * 100) : 0;
+
+      const saved = getSavedJobs();
+      const isSaved = saved.includes(job.id);
+      const applied = getApplications().some(a => a.jobId === job.id);
+
+      document.getElementById('jobDetail').innerHTML = `
+        <a href="index.html" class="back-link">← Back to listings</a>
+        <div class="detail-card">
+          <div class="detail-header">
+            <div class="company-avatar">${job.company.charAt(0)}</div>
+            <div>
+              <h1>${job.title}</h1>
+              <p class="company-name">${job.company} · ${job.location}</p>
+            </div>
+            ${matchScore > 0 ? `<div class="match-badge large">${matchScore}% match</div>` : ''}
+          </div>
+          <div class="detail-meta">
+            <span class="tag">${job.type}</span>
+            <span class="salary">₹${job.salary_min}–${job.salary_max} LPA</span>
+            <span class="posted">Posted ${timeAgo(job.posted_at)}</span>
+          </div>
+          <div class="detail-skills">
+            <h3>Required Skills</h3>
+            <div class="skills-list">
+              ${job.skills_required.map(s => {
+                const matched = userSkills.includes(s.toLowerCase());
+                return `<span class="skill-chip ${matched ? 'matched' : ''}">${s} ${matched ? '✓' : ''}</span>`;
+              }).join('')}
+            </div>
+          </div>
+          <div class="detail-desc">
+            <h3>Job Description</h3>
+            <p>${job.description}</p>
+          </div>
+          <div class="detail-actions">
+            <button class="btn ${applied ? 'btn-disabled' : 'btn-primary'} btn-lg" ${applied ? 'disabled' : ''} onclick="applyJob(${job.id})">
+              ${applied ? '✓ Applied' : '📨 Apply Now'}
+            </button>
+            <button class="btn btn-outline btn-lg" onclick="toggleSave(${job.id})">
+              ${isSaved ? '❤️ Saved' : '🤍 Save Job'}
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    function applyJob(id) {
+      const apps = getApplications();
+      if (apps.some(a => a.jobId === id)) return;
+      apps.push({ jobId: id, date: new Date().toISOString(), status: 'Applied' });
+      setApplications(apps);
+      location.reload();
+      showToast('Application submitted!');
+    }
+
+    function toggleSave(id) {
+      let saved = getSavedJobs();
+      if (saved.includes(id)) saved = saved.filter(s => s !== id);
+      else saved.push(id);
+      setSavedJobs(saved);
+      location.reload();
+    }
+
+    function timeAgo(dateStr) {
+      const diff = Date.now() - new Date(dateStr).getTime();
+      const days = Math.floor(diff / 86400000);
+      if (days === 0) return 'today';
+      if (days === 1) return 'yesterday';
+      if (days < 7) return days + ' days ago';
+      return Math.floor(days / 7) + ' weeks ago';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+  </script>
+</body>
+</html>

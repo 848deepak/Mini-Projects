@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>NotifyMe - Alert Hub</title>
+    <!-- Add HTMX for dynamic polling so it feels "real-time" -->
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+        :root { --bg: #fdf4ff; --surface: #ffffff; --border: #fae8ff; --text: #1e1b4b; --text-sec: #6b7280; --accent: #d946ef; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Manrope', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 40px; }
+        .container { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 350px 1fr; gap: 30px; }
+        .card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: 0 4px 6px -1px rgba(217, 70, 239, 0.1); border: 1px solid var(--border); }
+        h1, h2 { font-weight: 800; color: var(--text); }
+        h2 { margin-bottom: 20px; font-size: 18px; }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--text-sec); text-transform: uppercase; }
+        input, select, textarea { width: 100%; padding: 10px 14px; border: 2px solid var(--border); border-radius: 8px; font-size: 14px; transition: 0.2s; outline: none; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+        textarea { resize: vertical; min-height: 80px; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; width: 100%; transition: 0.2s; background: var(--accent); color: white; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn:hover { background: #c026d3; }
+        .text-error { color: #ef4444; font-size: 12px; margin-top: 4px; display: block; }
+        
+        .notification-list { display: flex; flex-direction: column; gap: 12px; max-height: 600px; overflow-y: auto; padding-right: 8px; }
+        .notification-list::-webkit-scrollbar { width: 6px; }
+        .notification-list::-webkit-scrollbar-track { background: transparent; }
+        .notification-list::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 10px; }
+        
+        .notification-item { padding: 16px; border-radius: 10px; border-left: 4px solid transparent; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: start; background: white; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); transition: 0.2s; }
+        .notification-item:hover { transform: translateY(-1px); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .notification-item.unread { border-left-color: var(--accent); background: #faf5ff; }
+        
+        .icon-box { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .type-Info .icon-box { background: #ebf8ff; color: #3182ce; }
+        .type-Warning .icon-box { background: #fffff0; color: #d69e2e; }
+        .type-Success .icon-box { background: #f0fff4; color: #38a169; }
+        .type-System .icon-box { background: #f3f4f6; color: #4b5563; }
+        
+        .n-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; color: var(--text); }
+        .n-msg { font-size: 13px; color: var(--text-sec); line-height: 1.5; margin-bottom: 6px; }
+        .n-time { font-size: 11px; color: #9ca3af; font-weight: 600; }
+        
+        .btn-mark { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; transition: 0.2s; white-space: nowrap; }
+        .btn-mark:hover { background: var(--accent); color: white; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 1000px; margin: 0 auto 30px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: var(--accent); color: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🔔</div>
+            <div>
+                <h1 style="margin: 0; font-size: 24px; line-height: 1;">NotifyMe</h1>
+                <div style="font-size: 13px; color: var(--text-sec); font-weight: 600;">Push Alert Dispatcher</div>
+            </div>
+        </div>
+        <form th:action="@{/mark-all-read}" method="post">
+            <button type="submit" class="btn" style="background: white; color: var(--accent); border: 2px solid var(--accent); padding: 8px 16px; width: auto;">Mark All Read</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <!-- New Notification Form -->
+        <div class="card" style="height: fit-content;">
+            <h2>Broadcast Alert</h2>
+            <form th:action="@{/send}" th:object="${newNotification}" method="post">
+                <div class="form-group">
+                    <label>Alert Title</label>
+                    <input type="text" th:field="*{title}" placeholder="System Update Scheduled" required />
+                </div>
+                <div class="form-group">
+                    <label>Alert Type</label>
+                    <select th:field="*{type}">
+                        <option value="Info">Info 💡</option>
+                        <option value="Warning">Warning ⚠️</option>
+                        <option value="Success">Success ✅</option>
+                        <option value="System">System ⚙️</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Message Content</label>
+                    <textarea th:field="*{message}" placeholder="Type your message here..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Target User (Optional)</label>
+                    <input type="text" th:field="*{targetUser}" placeholder="Leave empty for all users" />
+                </div>
+                <button type="submit" class="btn" style="margin-top: 10px;">Dispatch Alert</button>
+            </form>
+        </div>
+
+        <!-- Notification Feed -->
+        <!-- Adding hx-get to poll this div every 5 seconds for simulation -->
+        <div class="card" style="padding: 0; background: transparent; border: none; box-shadow: none;" hx-get="/" hx-select="#feed-container" hx-trigger="every 5s" hx-swap="outerHTML" id="feed-container">
+            <div th:if="${notifications.empty}" style="background: white; border-radius: var(--radius); padding: 50px; text-align: center; color: var(--text-sec); border: 1px dashed #cbd5e1;">Inbox is empty. You're all caught up!</div>
+            
+            <div class="notification-list" th:if="${!notifications.empty}">
+                <div th:each="n : ${notifications}" th:class="'notification-item type-' + ${n.type} + (${!n.readStatus} ? ' unread' : '')">
+                    <div class="icon-box">
+                        <span th:if="${n.type == 'Info'}">💡</span>
+                        <span th:if="${n.type == 'Warning'}">⚠️</span>
+                        <span th:if="${n.type == 'Success'}">✅</span>
+                        <span th:if="${n.type == 'System'}">⚙️</span>
+                    </div>
+                    <div>
+                        <div class="n-title">
+                            <span th:text="${n.title}"></span>
+                            <span th:if="${n.targetUser != null && !n.targetUser.isEmpty()}" style="font-size: 10px; background: #e5e7eb; padding: 2px 6px; border-radius: 4px; margin-left: 6px;" th:text="'@' + ${n.targetUser}"></span>
+                        </div>
+                        <div class="n-msg" th:text="${n.message}"></div>
+                        <div class="n-time" th:text="${#temporals.format(n.timestamp, 'dd MMM yyyy HH:mm')}"></div>
+                    </div>
+                    <div>
+                        <form th:action="@{/mark-read/{id}(id=${n.id})}" method="post" th:if="${!n.readStatus}">
+                            <button type="submit" class="btn-mark">Mark Read</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

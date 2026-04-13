@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Notification System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Notification orchestration</p>
+          <h1>Route messages across email, SMS, push, in-app, and webhooks.</h1>
+          <p class="hero__copy">
+            This MVP simulates preferences, quiet hours, idempotent sends, retries, and channel failover with a live delivery tracker.
+          </p>
+        </div>
+        <div class="hero__stats glass-panel">
+          <div><span class="metric-label">Queued</span><strong data-stat="queued">0</strong></div>
+          <div><span class="metric-label">Delivered</span><strong data-stat="delivered">0</strong></div>
+          <div><span class="metric-label">Failed</span><strong data-stat="failed">0</strong></div>
+          <div><span class="metric-label">Retries</span><strong data-stat="retried">0</strong></div>
+        </div>
+      </header>
+
+      <main class="dashboard-grid">
+        <section class="glass-panel panel panel--compose">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Compose</p>
+              <h2>Send a notification</h2>
+            </div>
+          </div>
+
+          <form class="compose-form" data-compose-form>
+            <label class="field">
+              <span>Recipient</span>
+              <select data-user-select></select>
+            </label>
+
+            <label class="field">
+              <span>Template</span>
+              <select data-template-select></select>
+            </label>
+
+            <label class="field">
+              <span>Priority</span>
+              <select data-priority-select>
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Reference</span>
+              <input type="text" data-reference-input placeholder="REF-2026" />
+            </label>
+
+            <label class="field">
+              <span>Idempotency key</span>
+              <div class="inline-field">
+                <input type="text" data-idempotency-input />
+                <button class="button button--secondary" type="button" data-refresh-idempotency>New</button>
+              </div>
+            </label>
+
+            <div class="channel-select">
+              <label><input type="checkbox" value="inApp" data-channel-check checked /> In-app</label>
+              <label><input type="checkbox" value="push" data-channel-check checked /> Push</label>
+              <label><input type="checkbox" value="email" data-channel-check checked /> Email</label>
+              <label><input type="checkbox" value="sms" data-channel-check /> SMS</label>
+              <label><input type="checkbox" value="webhook" data-channel-check /> Webhook</label>
+            </div>
+
+            <div class="preview-card">
+              <span class="metric-label">Preview</span>
+              <strong data-preview-subject></strong>
+              <p data-preview-body></p>
+            </div>
+
+            <button class="button" type="submit">Send notification</button>
+          </form>
+        </section>
+
+        <section class="glass-panel panel panel--preferences">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Preferences</p>
+              <h2>User routing rules</h2>
+            </div>
+          </div>
+          <div class="preferences-list" data-preferences-list></div>
+        </section>
+
+        <aside class="stacked">
+          <section class="glass-panel panel panel--analytics" data-analytics-panel></section>
+          <section class="glass-panel panel panel--activity">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Delivery tracker</p>
+                <h2>Live attempts</h2>
+              </div>
+            </div>
+            <ul class="attempts-list" data-attempts-list></ul>
+          </section>
+          <section class="glass-panel panel panel--activity">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Notifications</p>
+                <h2>Recent messages</h2>
+              </div>
+            </div>
+            <div class="notifications-list" data-notifications-list></div>
+          </section>
+        </aside>
+      </main>
+
+      <div class="toast" data-toast></div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

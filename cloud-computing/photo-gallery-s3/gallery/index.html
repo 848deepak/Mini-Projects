@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photography - S3 Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="top-bar">
+        <h1>Lens & Light</h1>
+        <div class="tabs" id="category-tabs">
+            <button class="tab-btn active" data-filter="all">All</button>
+            <button class="tab-btn" data-filter="nature">Nature</button>
+            <button class="tab-btn" data-filter="architecture">Architecture</button>
+            <button class="tab-btn" data-filter="portrait">Portrait</button>
+        </div>
+    </header>
+
+    <main class="gallery-container">
+        <!-- Images injected by JS -->
+        <div class="masonry-grid" id="masonry-grid"></div>
+    </main>
+
+    <!-- Full screen lightbox overlay -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <button class="lightbox-nav prev" id="lightbox-prev">&#10094;</button>
+        <img class="lightbox-image" id="lightbox-img" src="" alt="Full resolution view">
+        <button class="lightbox-nav next" id="lightbox-next">&#10095;</button>
+    </div>
+
+    <!-- Upload Indicator (UI Mockup) -->
+    <button class="upload-fab" id="upload-btn">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+    </button>
+
+    <script src="gallery.js"></script>
+</body>
+</html>

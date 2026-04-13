@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Parking System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero glass-panel">
+        <div>
+          <p class="eyebrow">Parking intelligence</p>
+          <h1>Discover, reserve, and pay for parking in real time.</h1>
+          <p class="hero__copy">Live slot availability, dynamic pricing, and active session tracking for drivers and operators.</p>
+        </div>
+        <div class="hero__metrics">
+          <div><span>Available slots</span><strong data-total-slots>0</strong></div>
+          <div><span>Reserved now</span><strong data-reserved-slots>0</strong></div>
+          <div><span>Avg price/hr</span><strong data-average-price>0</strong></div>
+          <div><span>Vehicle type</span><strong data-vehicle-type>Car</strong></div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="glass-panel panel">
+          <div class="panel__heading">
+            <div>
+              <p class="eyebrow">Lots</p>
+              <h2>Select a parking lot</h2>
+            </div>
+            <label class="field field--inline">
+              <span>Vehicle type</span>
+              <select data-vehicle-filter></select>
+            </label>
+          </div>
+          <div class="lot-grid" data-lot-grid></div>
+        </section>
+
+        <section class="glass-panel panel">
+          <div class="panel__heading">
+            <div>
+              <p class="eyebrow">Slots</p>
+              <h2>Reserve a slot</h2>
+            </div>
+            <div class="summary-pill" data-selected-lot>Choose a lot</div>
+          </div>
+          <div class="slot-grid" data-slot-grid></div>
+          <div class="reserve-form">
+            <label class="field">
+              <span>Duration (hours)</span>
+              <input type="range" min="1" max="8" step="1" value="2" data-duration-range />
+              <strong data-duration-label>2 hours</strong>
+            </label>
+            <div class="price-card">
+              <div><span>Estimated total</span><strong data-estimated-price>$0.00</strong></div>
+              <button class="button" type="button" data-reserve-button disabled>Reserve slot</button>
+            </div>
+          </div>
+        </section>
+
+        <aside class="glass-panel panel panel--sidebar">
+          <div class="panel__heading">
+            <div>
+              <p class="eyebrow">Sessions</p>
+              <h2>Active parking sessions</h2>
+            </div>
+          </div>
+          <div class="session-list" data-session-list></div>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

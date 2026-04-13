@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Traffic Monitoring System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="hero glass-panel">
+        <div>
+          <p class="eyebrow">City operations</p>
+          <h1>Monitor traffic, detect incidents, and manage alerts live.</h1>
+          <p class="hero__copy">An operational dashboard for sensor streams, route congestion, and incident response.</p>
+        </div>
+        <div class="hero__stats">
+          <div><span>Avg speed</span><strong data-stat-speed>0 km/h</strong></div>
+          <div><span>Active incidents</span><strong data-stat-incidents>0</strong></div>
+          <div><span>Alerts sent</span><strong data-stat-alerts>0</strong></div>
+          <div><span>Selected zone</span><strong data-stat-zone>Central</strong></div>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="glass-panel panel panel--zones">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Zones</p>
+              <h2>Live traffic zones</h2>
+            </div>
+          </div>
+          <div class="zone-grid" data-zone-grid></div>
+        </section>
+
+        <section class="glass-panel panel panel--feed">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Sensors</p>
+              <h2>Incoming stream</h2>
+            </div>
+            <div class="actions">
+              <button class="button button--ghost" type="button" data-simulate-event>Simulate event</button>
+              <button class="button" type="button" data-toggle-stream>Pause stream</button>
+            </div>
+          </div>
+          <div class="stream-list" data-stream-list></div>
+        </section>
+
+        <aside class="glass-panel panel panel--incidents">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Incidents</p>
+              <h2>Operator queue</h2>
+            </div>
+          </div>
+          <div class="incident-list" data-incident-list></div>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

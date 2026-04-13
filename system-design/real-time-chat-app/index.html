@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Real-Time Chat Application</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main class="chat-shell" aria-label="Chat application">
+      <aside class="sidebar" aria-label="Contacts">
+        <header class="sidebar__header">
+          <h1>Chats</h1>
+          <p>Realtime simulation</p>
+        </header>
+        <div class="contacts" data-contacts></div>
+      </aside>
+
+      <section class="chat" aria-label="Conversation panel">
+        <header class="chat__header" data-chat-header></header>
+
+        <section class="chat__messages" data-messages></section>
+
+        <div class="typing" data-typing hidden>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <footer class="composer">
+          <input
+            type="text"
+            data-message-input
+            placeholder="Type a message"
+            aria-label="Message input"
+            maxlength="600"
+          />
+          <button type="button" data-send-button>Send</button>
+        </footer>
+      </section>
+    </main>
+
+    <script type="module" src="./chat.js"></script>
+  </body>
+</html>

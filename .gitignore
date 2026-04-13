@@ -1,0 +1,25 @@
+# OS files
+.DS_Store
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Dependency folders
+node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment files
+.env
+.env.*

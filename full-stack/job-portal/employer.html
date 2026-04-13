@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobBoard — Employer Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="logo">💼 Job<span>Board</span></a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Jobs</a>
+        <a href="employer.html" class="nav-link active">Employer</a>
+      </div>
+    </div>
+  </nav>
+  <main class="container">
+    <div id="employerAuth" class="auth-card">
+      <h2>Employer Login</h2>
+      <p>Sign in to manage your job postings</p>
+      <div class="form-group">
+        <label>Company</label>
+        <select id="empCompany" class="input">
+          <option value="TechCorp India">TechCorp India</option>
+          <option value="DataWorks">DataWorks</option>
+          <option value="CloudNine Solutions">CloudNine Solutions</option>
+          <option value="FinServe Technologies">FinServe Technologies</option>
+          <option value="DesignHub">DesignHub</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="empPass" class="input" placeholder="emp123">
+      </div>
+      <button class="btn btn-primary btn-block" onclick="employerLogin()">Login</button>
+      <div class="hint">Password: <code>emp123</code></div>
+    </div>
+
+    <div id="employerDash" style="display:none;">
+      <div class="dash-header">
+        <h2 id="empWelcome">Dashboard</h2>
+        <button class="btn btn-primary" onclick="showAddJobModal()">+ Post New Job</button>
+      </div>
+      <div class="section-card">
+        <h3>Your Job Postings</h3>
+        <div id="empJobList"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add/Edit Job Modal -->
+  <div class="modal-overlay" id="jobModal">
+    <div class="modal">
+      <h3 id="jobModalTitle">Post New Job</h3>
+      <div class="form-group"><label>Title</label><input id="jm-title" class="input" placeholder="Software Engineer"></div>
+      <div class="form-group"><label>Type</label>
+        <select id="jm-type" class="input"><option>Full-time</option><option>Part-time</option><option>Internship</option><option>Contract</option><option>Remote</option></select>
+      </div>
+      <div class="form-group"><label>Location</label><input id="jm-location" class="input" placeholder="Bangalore"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Min Salary (LPA)</label><input id="jm-salmin" class="input" type="number" min="0"></div>
+        <div class="form-group"><label>Max Salary (LPA)</label><input id="jm-salmax" class="input" type="number" min="0"></div>
+      </div>
+      <div class="form-group"><label>Skills Required (comma-sep)</label><input id="jm-skills" class="input" placeholder="JavaScript, React, Node.js"></div>
+      <div class="form-group"><label>Description</label><textarea id="jm-desc" class="input" rows="4" placeholder="Job description..."></textarea></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeJobModal()">Cancel</button>
+        <button class="btn btn-primary" id="jm-save" onclick="saveJob()">Post Job</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script src="data.js"></script>
+  <script src="employer.js"></script>
+</body>
+</html>

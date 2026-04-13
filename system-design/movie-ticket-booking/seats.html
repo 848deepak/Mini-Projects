@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seat Selection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="site-shell site-shell--seats">
+      <header class="seat-header">
+        <button class="button button--ghost" type="button" data-back-button>Back to movies</button>
+        <div>
+          <p class="eyebrow">Seat selection</p>
+          <h1 data-movie-title>Loading movie...</h1>
+          <p data-movie-info></p>
+          <p class="seat-header__showtime" data-showtime-info></p>
+        </div>
+      </header>
+
+      <main class="seat-layout">
+        <section class="screen-panel">
+          <div class="screen">SCREEN</div>
+          <div class="seat-grid" data-seat-grid aria-label="Seat map"></div>
+          <div class="legend">
+            <span><i class="seat seat--available"></i> Available</span>
+            <span><i class="seat seat--selected"></i> Selected</span>
+            <span><i class="seat seat--booked"></i> Booked</span>
+          </div>
+        </section>
+
+        <aside class="summary-panel">
+          <div class="summary-card">
+            <p class="eyebrow">Booking summary</p>
+            <div class="summary-card__row">
+              <span>Selected seats</span>
+              <strong data-selected-count>0</strong>
+            </div>
+            <div class="summary-card__row">
+              <span>Total</span>
+              <strong data-total-price>$0.00</strong>
+            </div>
+            <ul class="summary-list" data-summary-list></ul>
+            <div class="summary-actions">
+              <button class="button button--ghost" type="button" data-reset-selection>Reset</button>
+              <button class="button" type="button" data-confirm-booking disabled>Confirm booking</button>
+            </div>
+          </div>
+          <p class="summary-note">Your draft selection is saved for this showtime in localStorage until you reset it or confirm booking.</p>
+        </aside>
+      </main>
+
+      <div class="booking-modal" data-booking-modal hidden></div>
+    </div>
+
+    <script type="module" src="./seat-map.js"></script>
+  </body>
+</html>

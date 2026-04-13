@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MediCare - Hospital Appointments</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        :root { --bg: #f8fafc; --surface: #ffffff; --border: #e2e8f0; --text: #0f172a; --text-sec: #64748b; --accent: #0ea5e9; --accent-light: #e0f2fe; --success: #10b981; --radius: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); padding: 40px; }
+        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 350px 1fr; gap: 30px; }
+        .card { background: var(--surface); border-radius: var(--radius); padding: 24px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); border: 1px solid var(--border); }
+        h1, h2 { font-weight: 700; margin-bottom: 20px; color: var(--text); }
+        .form-group { margin-bottom: 16px; }
+        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; color: var(--text-sec); }
+        input, select { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
+        input:focus, select:focus { border-color: var(--accent); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; width: 100%; transition: 150ms; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { filter: brightness(1.1); }
+        .btn-sm { padding: 6px 12px; font-size: 12px; width: auto; border-radius: 6px; }
+        .text-error { color: #ef4444; font-size: 12px; margin-top: 4px; display: block; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 14px; }
+        th { background: #f1f5f9; font-weight: 600; font-size: 12px; color: var(--text-sec); text-transform: uppercase; }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+        .badge.Scheduled { background: #fef3c7; color: #92400e; }
+        .badge.Completed { background: #dcfce7; color: #166534; }
+        .badge.Cancelled { background: #fee2e2; color: #991b1b; }
+        .flex-actions { display: flex; gap: 8px; }
+    </style>
+</head>
+<body>
+    <div style="max-width: 1200px; margin: 0 auto 30px; display: flex; align-items: center; gap: 10px;">
+        <div style="background: var(--accent); color: white; width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px;">🏥</div>
+        <h1 style="margin: 0;">MediCare <span style="font-size: 16px; color: var(--text-sec); font-weight: 500;">Hospital Appointments</span></h1>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Book Appointment</h2>
+            <form th:action="@{/book}" th:object="${newAppointment}" method="post">
+                <div class="form-group">
+                    <label>Patient Name</label>
+                    <input type="text" th:field="*{patientName}" placeholder="Patient's full name" />
+                    <span class="text-error" th:if="${#fields.hasErrors('patientName')}" th:errors="*{patientName}"></span>
+                </div>
+                <div class="form-group">
+                    <label>Department</label>
+                    <select th:field="*{department}">
+                        <option value="Cardiology">Cardiology</option>
+                        <option value="Neurology">Neurology</option>
+                        <option value="Orthopedics">Orthopedics</option>
+                        <option value="Pediatrics">Pediatrics</option>
+                        <option value="Dentistry">Dentistry</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Doctor</label>
+                    <select th:field="*{doctorName}">
+                        <option value="Dr. Smith (Cardiology)">Dr. Smith</option>
+                        <option value="Dr. Johnson (Neurology)">Dr. Johnson</option>
+                        <option value="Dr. Williams (Orthopedics)">Dr. Williams</option>
+                        <option value="Dr. Brown (Pediatrics)">Dr. Brown</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" th:field="*{appointmentDate}" />
+                        <span class="text-error" th:if="${#fields.hasErrors('appointmentDate')}" th:errors="*{appointmentDate}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" th:field="*{appointmentTime}" />
+                        <span class="text-error" th:if="${#fields.hasErrors('appointmentTime')}" th:errors="*{appointmentTime}"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Confirm Booking</button>
+            </form>
+        </div>
+
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="padding: 24px 24px 0;"><h2>Today's Appointments</h2></div>
+            <div th:if="${appointments.empty}" style="padding: 40px; text-align: center; color: var(--text-sec);">No appointments scheduled.</div>
+            <table th:if="${!appointments.empty}">
+                <thead><tr><th>Patient</th><th>Doctor & Dept</th><th>Date & Time</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>
+                    <tr th:each="a : ${appointments}">
+                        <td th:text="${a.patientName}" style="font-weight: 600;"></td>
+                        <td>
+                            <div th:text="${a.doctorName}"></div>
+                            <div th:text="${a.department}" style="font-size: 11px; color: var(--text-sec); margin-top: 2px;"></div>
+                        </td>
+                        <td>
+                            <div th:text="${a.appointmentDate}"></div>
+                            <div th:text="${a.appointmentTime}" style="font-weight: 600;"></div>
+                        </td>
+                        <td><span th:text="${a.status}" th:class="'badge ' + ${a.status}"></span></td>
+                        <td class="flex-actions">
+                            <form th:action="@{/status/{id}(id=${a.id})}" method="post" th:if="${a.status == 'Scheduled'}">
+                                <input type="hidden" name="status" value="Completed" />
+                                <button type="submit" class="btn btn-sm" style="background:#dcfce7; color:#166534;">Complete</button>
+                            </form>
+                            <form th:action="@{/status/{id}(id=${a.id})}" method="post" th:if="${a.status == 'Scheduled'}">
+                                <input type="hidden" name="status" value="Cancelled" />
+                                <button type="submit" class="btn btn-sm" style="background:#fee2e2; color:#991b1b;">Cancel</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

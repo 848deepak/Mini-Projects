@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Portal — Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>🎓 College Portal</h2>
+        <span class="role-badge" id="roleBadge"></span>
+      </div>
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+      <div class="sidebar-footer">
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-content">
+      <div class="top-bar">
+        <h1 id="pageTitle">Dashboard</h1>
+        <div class="user-info" id="userInfo"></div>
+      </div>
+      <div id="content"></div>
+    </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <h3 id="modalTitle"></h3>
+      <div id="modalBody"></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" id="modalConfirm">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="data.js"></script>
+  <script src="auth.js"></script>
+  <script src="admin.js"></script>
+  <script src="faculty.js"></script>
+  <script src="student.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeData();
+      const session = checkSession();
+      if (!session) return;
+
+      const { role, name } = session;
+      document.getElementById('roleBadge').textContent = role;
+      document.getElementById('roleBadge').classList.add(role);
+      document.getElementById('userInfo').textContent = `Welcome, ${name}`;
+
+      const NAV_CONFIG = {
+        admin: [
+          { icon: '📊', label: 'Dashboard', action: () => renderSection('dashboard') },
+          { icon: '👨‍🎓', label: 'Students', action: () => renderSection('students') },
+          { icon: '👨‍🏫', label: 'Faculty', action: () => renderSection('faculty') },
+          { icon: '📢', label: 'Announcements', action: () => renderSection('announcements') }
+        ],
+        faculty: [
+          { icon: '📊', label: 'Dashboard', action: () => renderSection('dashboard') },
+          { icon: '📋', label: 'Attendance', action: () => renderSection('attendance') },
+          { icon: '📝', label: 'Marks Entry', action: () => renderSection('marks') }
+        ],
+        student: [
+          { icon: '📊', label: 'Dashboard', action: () => renderSection('dashboard') },
+          { icon: '📅', label: 'Timetable', action: () => renderSection('timetable') },
+          { icon: '📝', label: 'My Marks', action: () => renderSection('marks') },
+          { icon: '💰', label: 'Fee Status', action: () => renderSection('fees') }
+        ]
+      };
+
+      const nav = document.getElementById('sidebarNav');
+      NAV_CONFIG[role].forEach((item, i) => {
+        const btn = document.createElement('button');
+        btn.className = `nav-item${i === 0 ? ' active' : ''}`;
+        btn.innerHTML = `<span class="icon">${item.icon}</span> ${item.label}`;
+        btn.addEventListener('click', () => {
+          nav.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('pageTitle').textContent = item.label;
+          item.action();
+        });
+        nav.appendChild(btn);
+      });
+
+      // Render default dashboard
+      renderSection('dashboard');
+
+      function renderSection(section) {
+        const container = document.getElementById('content');
+        if (role === 'admin') {
+          if (section === 'dashboard') renderAdminDashboard(container);
+          else if (section === 'students') renderAdminStudents(container);
+          else if (section === 'faculty') renderAdminFaculty(container);
+          else if (section === 'announcements') renderAdminAnnouncements(container);
+        } else if (role === 'faculty') {
+          if (section === 'dashboard') renderFacultyDashboard(container);
+          else if (section === 'attendance') renderFacultyAttendance(container);
+          else if (section === 'marks') renderFacultyMarks(container);
+        } else if (role === 'student') {
+          if (section === 'dashboard') renderStudentDashboard(container);
+          else if (section === 'timetable') renderStudentTimetable(container);
+          else if (section === 'marks') renderStudentMarks(container);
+          else if (section === 'fees') renderStudentFees(container);
+        }
+      }
+    });
+
+    // Modal helpers
+    let modalCallback = null;
+    function openModal(title, bodyHTML, onConfirm) {
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = bodyHTML;
+      document.getElementById('modalOverlay').classList.add('active');
+      modalCallback = onConfirm;
+      document.getElementById('modalConfirm').onclick = () => { if (modalCallback) modalCallback(); };
+    }
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      modalCallback = null;
+    }
+
+    // Toast helper
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+  </script>
+</body>
+</html>
