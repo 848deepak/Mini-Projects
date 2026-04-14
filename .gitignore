@@ -1,25 +1,122 @@
-# OS files
+# ------------------------------------------------------------
+# Root .gitignore for polyglot mini-project monorepo
+# Covers Node.js, Java, Python, Docker, Terraform, and tooling
+# ------------------------------------------------------------
+
+# OS / file explorer noise
 .DS_Store
+Thumbs.db
+Desktop.ini
 
-# IDE/editor
+# Editors / IDEs
 .vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
 .idea/
+*.iml
+*.ipr
+*.iws
 
-# Logs
+# Logs and runtime data
 *.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
-# Dependency folders
+# Secrets and environment files
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Node.js
 node_modules/
-
-# Build outputs
+.npm/
+.pnpm-store/
+.yarn/
+.turbo/
+.next/
+.nuxt/
+.svelte-kit/
+coverage/
 dist/
 build/
+*.tsbuildinfo
+
+# Java / Maven / Gradle
+target/
+build/
 out/
+.gradle/
+.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+*.war
+*.ear
+
+# Keep wrapper scripts/properties tracked
+!mvnw
+!mvnw.cmd
+!gradlew
+!gradlew.bat
+!**/.mvn/wrapper/maven-wrapper.properties
+!**/gradle/wrapper/gradle-wrapper.properties
 
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.venv/
+venv/
+ENV/
+env/
 
-# Environment files
-.env
-.env.*
+# Archives and binary artifacts
+*.zip
+*.tar
+*.gz
+*.tgz
+*.7z
+*.rar
+*.pid
+*.seed
+
+# Docker / container artifacts
+.docker/
+.docker-cache/
+
+# Terraform / IaC
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraform.lock.hcl
+
+# Test and coverage outputs
+test-results/
+reports/
+
+# Misc temp/cache
+tmp/
+temp/
+.cache/
+
+# Optional local project notes
+*.local

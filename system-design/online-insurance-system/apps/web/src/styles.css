@@ -1,0 +1,181 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@400;500;700&display=swap");
+
+:root {
+  --bg: #f4f6ec;
+  --ink: #142315;
+  --muted: #36513a;
+  --brand: #1d6f42;
+  --brand-soft: #d9f3e1;
+  --card: #ffffff;
+  --danger: #8f1c1c;
+  --shadow: 0 14px 28px rgba(23, 45, 27, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", sans-serif;
+  background:
+    radial-gradient(circle at 8% 10%, #e4efd4 0, transparent 35%),
+    radial-gradient(circle at 95% 95%, #cde7d0 0, transparent 42%),
+    var(--bg);
+  color: var(--ink);
+}
+
+.page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 330px 1fr;
+}
+
+.hero {
+  padding: 2.4rem 2rem;
+  background: linear-gradient(145deg, #10361c 0%, #1f5b33 55%, #2a7c44 100%);
+  color: #eff9f0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.16rem;
+  opacity: 0.8;
+  font-size: 0.76rem;
+}
+
+.hero h1 {
+  font-family: "Space Grotesk", sans-serif;
+  margin-top: 0.35rem;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.hero p {
+  line-height: 1.6;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.chips span {
+  background: rgba(255, 255, 255, 0.16);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.83rem;
+}
+
+.content {
+  padding: 1.8rem;
+  display: grid;
+  gap: 1rem;
+  animation: rise 0.45s ease;
+}
+
+.card {
+  background: var(--card);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 1rem 1.1rem;
+  border: 1px solid #e0eadb;
+  animation: cardEntry 0.35s ease;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+.card-header p {
+  margin: 0.35rem 0 0.85rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  background: var(--brand);
+  color: #f3fff7;
+  padding: 0.62rem 1rem;
+  font-weight: 700;
+  font-family: "Manrope", sans-serif;
+  cursor: pointer;
+  transition: transform 0.12s ease, opacity 0.2s ease;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.result {
+  margin-top: 0.7rem;
+  font-size: 0.93rem;
+  color: #18331d;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.alert {
+  background: #ffe9e9;
+  border: 1px solid #ffcccc;
+  color: var(--danger);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardEntry {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 1024px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    position: relative;
+    height: auto;
+  }
+
+  .content {
+    padding-top: 1.2rem;
+  }
+}

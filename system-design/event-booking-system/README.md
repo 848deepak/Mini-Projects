@@ -219,8 +219,69 @@ Shared:
 4. Offline-capable check-in device sync.
 5. Sponsor/partner bundle ticketing.
 
-## Folder Structure
+## 9. Implemented Application (This Repository)
 
-1. prompt.md
-2. README.md
-3. src/
+This repository now includes a working full-stack implementation:
+
+1. Backend:
+	- Java 17 + Spring Boot 3 REST API.
+	- In-memory inventory, hold TTL, idempotency keys, booking confirmation, cancellation, waitlist, and check-in validation.
+
+2. Frontend:
+	- React + Vite single-page app.
+	- Login-first flow, sidebar-led layout, dense operational views, and mobile-friendly responsive behavior.
+
+### 9.1 Tech Stack
+
+1. Backend: Java 17, Spring Boot, Maven.
+2. Frontend: React 18, Vite 5, plain CSS.
+
+### 9.2 Repository Structure
+
+1. backend/
+	- Spring Boot API.
+2. frontend/
+	- React web app.
+3. prompt.md
+4. README.md
+
+### 9.3 Implemented API Endpoints
+
+1. GET /v1/events
+2. GET /v1/events/{eventId}
+3. GET /v1/events/{eventId}/availability
+4. POST /v1/holds
+5. POST /v1/bookings
+6. POST /v1/bookings/{bookingId}/cancel
+7. GET /v1/bookings?userId=...
+8. POST /v1/waitlist
+9. GET /v1/waitlist/{waitlistId}
+10. POST /v1/checkins/validate
+
+### 9.4 Local Run Instructions
+
+1. Start backend:
+
+```bash
+cd backend
+mvn spring-boot:run
+```
+
+Backend runs on http://localhost:8080.
+
+2. Start frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Frontend runs on http://localhost:5173.
+
+### 9.5 Build Verification
+
+1. Backend compile verified:
+	- mvn -DskipTests compile
+2. Frontend production build verified:
+	- npm run build

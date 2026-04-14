@@ -1,0 +1,22 @@
+{
+  "name": "online-insurance-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-oriented full-stack insurance platform demo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w @insurance/api\" \"npm run dev -w @insurance/web\"",
+    "build": "npm run build -w @insurance/shared && npm run build -w @insurance/api && npm run build -w @insurance/web",
+    "test": "npm run test -w @insurance/api",
+    "lint": "npm run lint -w @insurance/api && npm run lint -w @insurance/web"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -80,8 +80,8 @@ Shared:
 
 ### 4.1 Storage Choices
 
-1. OLTP DB (PostgreSQL): wallet account state and transfer metadata.
-2. Ledger store (PostgreSQL/Cockroach/Spanner model): append-only journal.
+1. OLTP DB (MySQL 8.0): wallet account state and transfer metadata.
+2. Ledger store (MySQL append-only journal table): durable ledger entries.
 3. Redis cache: balance snapshots and idempotency key cache.
 4. Event bus: transaction events for notifications and analytics.
 5. Warehouse: reporting and compliance exports.
@@ -226,3 +226,78 @@ Shared:
 1. prompt.md
 2. README.md
 3. src/
+4. pom.xml
+5. docker-compose.yml
+
+## Reference Implementation (Spring Boot)
+
+Tech stack used in this project:
+
+1. Java 17+
+2. Spring Boot 3.x
+3. Maven
+4. MySQL 8.0
+5. Redis
+6. RabbitMQ
+
+### Implemented APIs
+
+1. POST /v1/wallets
+2. GET /v1/wallets/{walletId}/balance
+3. POST /v1/transfers/p2p
+
+### Frontend Console
+
+This project now includes a production-ready web console served by Spring Boot from `src/main/resources/static`.
+
+1. Open `http://localhost:8080` after starting the app.
+2. Use the console to:
+	- create wallets,
+	- fetch wallet balances,
+	- initiate P2P transfers with generated idempotency keys.
+
+The frontend calls the backend APIs on the same origin (`/v1/*`) and includes:
+
+1. responsive layout for desktop/mobile,
+2. API health indicator,
+3. client-side UUID validation and error surfacing,
+4. toast notifications and activity timeline,
+5. loading states for all actions.
+
+### Run Locally
+
+1. Start dependencies:
+
+```bash
+docker compose up -d
+```
+
+2. Build app:
+
+```bash
+./mvnw clean package
+```
+
+If Maven Wrapper is not present, use:
+
+```bash
+mvn clean package
+```
+
+3. Run app:
+
+```bash
+./mvnw spring-boot:run
+```
+
+or
+
+```bash
+mvn spring-boot:run
+```
+
+### Notes
+
+1. Balance reads use Redis cache with short TTL and explicit invalidation after transfers.
+2. P2P transfer uses row-level locking and transactional ledger writes to avoid race conditions.
+3. RabbitMQ publishes transaction-created events for downstream notifications.

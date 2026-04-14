@@ -1,0 +1,12 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: event-booking-backend
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics

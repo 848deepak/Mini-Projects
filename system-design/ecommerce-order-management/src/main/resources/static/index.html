@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OMS Control Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="bg-mesh"></div>
+
+  <main class="app-shell" id="appShell">
+    <section class="login-panel" id="loginPanel">
+      <div class="login-card">
+        <h1>OMS Control Center</h1>
+        <p>Authenticate to access customer operations dashboard.</p>
+        <form id="loginForm">
+          <label>
+            Operator Name
+            <input type="text" id="operatorName" placeholder="Ava Patel" required />
+          </label>
+          <label>
+            Customer ID
+            <input type="text" id="customerId" placeholder="cust-1001" required />
+          </label>
+          <button type="submit">Enter Dashboard</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="dashboard hidden" id="dashboard">
+      <aside class="sidebar">
+        <div>
+          <h2>Order Ops</h2>
+          <p id="operatorLabel"></p>
+          <p class="sidebar-note">Realtime workflow and customer support controls.</p>
+        </div>
+        <nav>
+          <button class="nav-btn active" data-tab="orders">Orders</button>
+          <button class="nav-btn" data-tab="create">Create Order</button>
+          <button class="nav-btn" data-tab="returns">Returns</button>
+        </nav>
+      </aside>
+
+      <section class="content">
+        <header class="content-header">
+          <div>
+            <h3>Operational Dashboard</h3>
+            <p>Realtime workflow for orders, shipping, and returns.</p>
+          </div>
+          <div class="kpi-strip">
+            <div class="kpi-card">
+              <span>Total</span>
+              <strong id="kpiTotal">0</strong>
+            </div>
+            <div class="kpi-card">
+              <span>In Progress</span>
+              <strong id="kpiProgress">0</strong>
+            </div>
+            <div class="kpi-card">
+              <span>Delivered</span>
+              <strong id="kpiDelivered">0</strong>
+            </div>
+          </div>
+          <button class="ghost" id="logoutBtn">Logout</button>
+        </header>
+
+        <div id="toast" class="toast hidden"></div>
+
+        <section class="tab-panel" id="tab-orders">
+          <div class="panel-row">
+            <button id="refreshOrders">Refresh Orders</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order No</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody"></tbody>
+            </table>
+          </div>
+          <div id="orderDetail" class="detail-card"></div>
+        </section>
+
+        <section class="tab-panel hidden" id="tab-create">
+          <form id="createOrderForm" class="stacked-form">
+            <h4>Create New Order</h4>
+            <label>
+              SKU
+              <input type="text" id="sku" value="SKU-101" required />
+            </label>
+            <label>
+              Product Name
+              <input type="text" id="productName" value="Premium Tee" required />
+            </label>
+            <label>
+              Quantity
+              <input type="number" id="quantity" min="1" value="1" required />
+            </label>
+            <label>
+              Unit Price
+              <input type="number" id="unitPrice" min="0.01" step="0.01" value="49.99" required />
+            </label>
+            <label>
+              Tax
+              <input type="number" id="tax" min="0" step="0.01" value="5.50" required />
+            </label>
+            <label>
+              Shipping Fee
+              <input type="number" id="shippingFee" min="0" step="0.01" value="3.99" required />
+            </label>
+            <label>
+              Discount
+              <input type="number" id="discount" min="0" step="0.01" value="0" required />
+            </label>
+            <button type="submit">Place Order</button>
+          </form>
+        </section>
+
+        <section class="tab-panel hidden" id="tab-returns">
+          <form id="returnForm" class="stacked-form">
+            <h4>Create Return Request</h4>
+            <label>
+              Order ID
+              <input type="text" id="returnOrderId" placeholder="order-1001" required />
+            </label>
+            <label>
+              Reason
+              <input type="text" id="returnReason" value="Damaged item" required />
+            </label>
+            <label>
+              Refund Amount
+              <input type="number" id="refundAmount" min="0.01" step="0.01" value="20.00" required />
+            </label>
+            <button type="submit">Submit Return</button>
+          </form>
+          <div id="returnResult" class="detail-card"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
