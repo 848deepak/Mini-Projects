@@ -42,10 +42,19 @@ mini-projects/
 
 Use `main` as stable integration branch and domain branches for focused work:
 
-- `projects/ai-ml`
-- `projects/cloud-computing`
-- `projects/full-stack`
-- `projects/system-design`
+- `domains/ai-ml`
+- `domains/cloud-computing`
+- `domains/full-stack`
+- `domains/system-design`
+
+Use per-project long-lived branches when you need isolated project tracks:
+
+- `projects/<domain>/<project>`
+
+Examples:
+
+- `projects/full-stack/online-food-ordering`
+- `projects/system-design/digital-wallet`
 
 Use feature branches from domain branches:
 
