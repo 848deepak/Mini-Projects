@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: courier-tracking-system
+  datasource:
+    url: jdbc:h2:mem:courierdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  port: 8080

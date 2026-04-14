@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Pulse</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="container">
+    <header class="hero">
+        <h1>CRM Pulse</h1>
+        <p>Lead intake, qualification, conversion and pipeline tracking.</p>
+    </header>
+
+    <section class="grid">
+        <article class="card">
+            <h2>Create Lead</h2>
+            <form id="leadForm">
+                <input name="source" placeholder="Source (web/referral)" required>
+                <input name="fullName" placeholder="Full Name" required>
+                <input name="email" placeholder="Email" type="email" required>
+                <input name="phone" placeholder="Phone" required>
+                <input name="ownerUserId" placeholder="Owner User ID" required>
+                <button type="submit">Create Lead</button>
+            </form>
+            <div id="leadResult" class="result"></div>
+        </article>
+
+        <article class="card">
+            <h2>Qualify Lead</h2>
+            <form id="qualifyForm">
+                <input name="leadId" placeholder="Lead ID" required>
+                <select name="decision">
+                    <option>QUALIFIED</option>
+                    <option>REJECTED</option>
+                </select>
+                <input name="qualificationNotes" placeholder="Notes" required>
+                <button type="submit">Update Lead</button>
+            </form>
+            <div id="qualifyResult" class="result"></div>
+        </article>
+    </section>
+
+    <section class="card">
+        <h2>Forecast</h2>
+        <form id="forecastForm" class="inline">
+            <input name="quarter" placeholder="2026-Q2" value="2026-Q2">
+            <button type="submit">Load</button>
+        </form>
+        <pre id="forecastResult" class="json"></pre>
+    </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

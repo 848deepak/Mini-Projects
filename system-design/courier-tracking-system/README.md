@@ -1,3 +1,53 @@
+# Courier Tracking System (Spring Boot + JS)
+
+This project is a modern implementation of the courier tracking design using:
+
+- Java 21
+- Spring Boot 3 (REST APIs)
+- H2 database (development)
+- Vanilla JavaScript dashboard (served from Spring static assets)
+
+## Features
+
+- Create shipment with sender/receiver metadata
+- Auto-generate tracking number
+- Ingest tracking lifecycle events with idempotency key
+- Enforce shipment state-machine transitions
+- Fetch live tracking timeline by tracking number
+- Operations actions: reroute, hold, reattempt
+- Delivery completion with OTP demo check (`123456`)
+
+## Run
+
+```bash
+cd /Users/deepakpandey/Coding/mini-projects/system-design/courier-tracking-system
+mvn spring-boot:run
+```
+
+Open:
+
+- App UI: http://localhost:8080/
+- H2 console: http://localhost:8080/h2-console
+
+H2 JDBC URL:
+
+```text
+jdbc:h2:mem:courierdb
+```
+
+## API Summary
+
+- `POST /api/v1/shipments`
+- `POST /api/v1/tracking/events`
+- `GET /api/v1/track/{trackingNo}`
+- `GET /api/v1/shipments/{shipmentId}/timeline`
+- `POST /api/v1/shipments/{shipmentId}/actions`
+- `POST /api/v1/shipments/{shipmentId}/deliver`
+
+## Notes
+
+- This is a production-style starter with in-memory DB for local development.
+- For production, replace H2 with PostgreSQL and add auth + message bus for ingest/notifications.
 # Courier Tracking System
 
 Category: system-design

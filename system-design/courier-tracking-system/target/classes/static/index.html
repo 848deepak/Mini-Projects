@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier Tracking Command Center</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="bg-orb orb-1"></div>
+<div class="bg-orb orb-2"></div>
+
+<main class="container">
+    <header class="hero">
+        <h1>Courier Tracking Command Center</h1>
+        <p>Create shipments, ingest state updates, and track parcel timelines in real time.</p>
+    </header>
+
+    <section class="grid">
+        <article class="card">
+            <h2>Create Shipment</h2>
+            <form id="createShipmentForm">
+                <input name="merchantId" placeholder="Merchant ID" required>
+                <input name="senderName" placeholder="Sender Name" required>
+                <input name="senderAddress" placeholder="Sender Address" required>
+                <input name="receiverName" placeholder="Receiver Name" required>
+                <input name="receiverAddress" placeholder="Receiver Address" required>
+                <input name="serviceLevel" placeholder="Service Level (SAME_DAY, STANDARD)" required>
+                <button type="submit">Create</button>
+            </form>
+            <div id="createResult" class="result"></div>
+        </article>
+
+        <article class="card">
+            <h2>Ingest Tracking Event</h2>
+            <form id="eventForm">
+                <input name="trackingNo" placeholder="Tracking Number" required>
+                <select name="eventType" required>
+                    <option value="">Select state</option>
+                    <option>CREATED</option>
+                    <option>PICKUP_SCHEDULED</option>
+                    <option>PICKED_UP</option>
+                    <option>IN_TRANSIT</option>
+                    <option>AT_HUB</option>
+                    <option>OUT_FOR_DELIVERY</option>
+                    <option>DELIVERED</option>
+                    <option>DELIVERY_FAILED</option>
+                    <option>RETURN_INITIATED</option>
+                    <option>RETURNED</option>
+                </select>
+                <input name="location" placeholder="Location" required>
+                <input name="sourceId" placeholder="Source ID" required>
+                <input name="payload" placeholder="Payload (optional)">
+                <button type="submit">Ingest Event</button>
+            </form>
+            <div id="eventResult" class="result"></div>
+        </article>
+    </section>
+
+    <section class="card tracking-card">
+        <h2>Track Shipment</h2>
+        <form id="trackForm" class="inline-form">
+            <input name="trackingNo" placeholder="Tracking Number" required>
+            <button type="submit">Track</button>
+        </form>
+        <div id="trackingState" class="state"></div>
+        <ul id="timeline" class="timeline"></ul>
+    </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
